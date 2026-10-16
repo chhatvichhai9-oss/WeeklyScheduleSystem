@@ -3,95 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ប្រព័ន្ធគ្រប់គ្រងកាលវិភាគសិក្សា - Sign In</title>
+    <title>School Login Form</title>
     <style>
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            /* ផ្ទាំង Background ពណ៌ខៀវ និងលាយជម្រាលស្អាត */
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #38bdf8 100%);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            position: relative;
+            overflow: hidden;
         }
 
-        .login-card {
+        .container {
             background: #ffffff;
             width: 100%;
             max-width: 400px;
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             text-align: center;
+            z-index: 10;
+            margin: 20px;
         }
 
-        .logo-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
-
-        h2 {
-            color: #333333;
-            margin-bottom: 5px;
-            font-size: 24px;
-        }
-
-        p.subtitle {
-            color: #666666;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-
-        .info-box {
-            background-color: #e3f2fd;
-            color: #0d47a1;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 13px;
+        .school-header {
             margin-bottom: 20px;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        }
+
+        .container h2 {
+            color: #1e3a8a;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: bold;
         }
 
         .input-group {
             margin-bottom: 15px;
-            text-align: left;
+            position: relative;
         }
 
         .input-group input {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 14px 15px 14px 45px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
             outline: none;
-            transition: 0.3s;
+            font-size: 15px;
+            background-color: #f8fafc;
+            transition: all 0.3s ease;
         }
 
         .input-group input:focus {
-            border-color: #4CAF50;
-            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+            border-color: #2563eb;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .input-group::before {
+            font-family: sans-serif;
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        .input-group.user::before {
+            content: "👤";
+        }
+
+        .input-group.pass::before {
+            content: "🔒";
         }
 
         .remember-forgot {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px;
+            font-size: 14px;
             margin-bottom: 20px;
-            color: #666;
+            color: #64748b;
         }
 
         .remember-forgot a {
-            color: #2196F3;
+            color: #2563eb;
             text-decoration: none;
         }
 
@@ -100,58 +104,40 @@
         }
 
         .btn-signin {
-            background-color: #2e7d32;
+            width: 100%;
+            padding: 14px;
+            background-color: #2563eb;
             color: white;
             border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
-            margin-bottom: 12px;
+            transition: background 0.3s ease;
         }
 
         .btn-signin:hover {
-            background-color: #1b5e20;
-        }
-
-        .btn-create {
-            background-color: #1976d2;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-create:hover {
-            background-color: #0d47a1;
+            background-color: #1d4ed8;
         }
     </style>
 </head>
 <body>
 
-    <div class="login-card">
-        <div class="logo-icon">🎓</div>
-        <h2>ប្រព័ន្ធគ្រប់គ្រងកាលវិភាគសិក្សា</h2>
-        <p class="subtitle">ចូលទៅកាន់គណនីរបស់អ្នក</p>
-
-        <div class="info-box">
-            <span>ℹ️</span>
-            <span>លោកគ្រូអ្នកគ្រូត្រូវការយកទៅប្រើអាចទាក់ទងតាមលេខ 098 98 11 92.</span>
+    <div class="container">
+        <div class="school-header">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
+            </svg>
+            <h2>ប្រព័ន្ធបែងចែកកាលវិភាគ</h2>
+            <h2>Tel: 098981192/0973272123</h2>
+            <h2>School Login</h2>
         </div>
 
         <form id="loginForm">
-            <div class="input-group">
-                <input type="text" id="username" placeholder="Email ឧ.vichhaichhat9@gmail.com" required>
+            <div class="input-group user">
+                <input type="text" id="username" placeholder="Full Name or Username" required>
             </div>
-            <div class="input-group">
+            <div class="input-group pass">
                 <input type="password" id="password" placeholder="Password" required>
             </div>
 
@@ -160,8 +146,7 @@
                 <a href="#">Forgot password?</a>
             </div>
 
-            <button type="submit" class="btn-signin">Sign In</button>
-            <button type="button" class="btn-create" onclick="alert('មុខងារបង្កើត Account កំពុងអភិវឌ្ឍន៍!')">Create account</button>
+            <button type="submit" class="btn-signin">Submit</button>
         </form>
     </div>
 
@@ -172,15 +157,11 @@
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
 
-            // គំរូគណនីងាយៗសម្រាប់តេស្ត (Admin / 123456)
             if (user === "admin" && pass === "123456") {
-                // កំណត់សិទ្ធិថាបានចូលហើយ
                 localStorage.setItem("isLoggedIn", "true");
-                
-                // បញ្ជូនទៅកាន់ទំព័រកម្មវិធីខាងក្នុង (app.html)
                 window.location.href = "app.html";
             } else {
-                alert("Email ឬ Password មិនត្រឹមត្រូវទេ!");
+                alert("ឈ្មោះ ឬ Password មិនត្រឹមត្រូវទេ!");
             }
         });
     </script>
