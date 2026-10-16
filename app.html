@@ -576,7 +576,6 @@ function autoDivideHours() {
      * អង្គារ 07-09
      * ពុធ 07-09
      */
-
 let selectedBlocks = [];
 
 // ==========================================
@@ -855,6 +854,16 @@ function renderMasterSchedule() {
     const filteredEntries = entries.filter(e => e.role.includes("គ្រូ") || e.role === ""); 
     const uniqueClasses = [...new Set(entries.map(e => e.className))].sort();
     
+    // បង្កើតលេខសន្ទស្សសម្រាប់ឈ្មោះគ្រូនីមួយៗ
+    const teacherNumberMap = {};
+    const uniqueTeacherNames = [
+        ...new Set(entries.map(e => e.name).filter(Boolean))
+    ];
+
+    uniqueTeacherNames.forEach((teacherName, index) => {
+        teacherNumberMap[teacherName] = index + 1;
+    });
+
     if (uniqueClasses.length === 0) { outer.innerHTML = ""; return; }
 
     let html = `<div class="master-container">
@@ -902,8 +911,28 @@ function renderMasterSchedule() {
         days.slice(0, 3).forEach(day => {
             allSlots.forEach(slot => {
                 const match = filteredEntries.find(e => e.className === cName && e.day === day && e.time === slot);
-                if(match) { html += `<td style="text-align:center;">${match.sub}</td>`; weeklyTotal++; } 
-                else { html += `<td></td>`; }
+
+            if (match) {
+                const teacherNo = teacherNumberMap[match.name] || "";
+
+                html += `<td style="text-align:center;">
+                    <div style="position:relative; padding-bottom:0.1px;">
+                        ${match.sub}
+                        <span style="
+                            position:absolute;
+                            right:0.2px;
+                            bottom:0;
+                            font-size:8px;
+                            line-height:1;
+                            color:#FF0000;
+                        ">${teacherNo}</span>
+                    </div>
+                </td>`;
+                weeklyTotal++;
+            } else {
+                html += `<td></td>`;
+            }
+
             });
         });
         html += `</tr>`;
@@ -923,15 +952,36 @@ function renderMasterSchedule() {
         });
         html += `</tr>`;
 
+
         html += `<tr><td style="background:#fdfefe; font-size:8px; text-align:center; border-bottom:4px solid #2c3e50;">ម.វិជ្ជា</td>`;
         days.slice(3, 6).forEach(day => {
             allSlots.forEach(slot => {
                 const match = filteredEntries.find(e => e.className === cName && e.day === day && e.time === slot);
-                if(match) { html += `<td style="text-align:center; border-bottom:4px solid #2c3e50;">${match.sub}</td>`; weeklyTotal++; } 
-                else { html += `<td style="border-bottom:4px solid #2c3e50;"></td>`; }
+
+                if (match) {
+                    const teacherNo = teacherNumberMap[match.name] || "";
+
+                    html += `<td style="text-align:center; border-bottom:4px solid #2c3e50;">
+                    <div style="position:relative; padding-bottom:0.1px;">
+                        ${match.sub}
+                        <span style="
+                            position:absolute;
+                            right:0.2px;
+                            bottom:0;
+                            font-size:8px;
+                            line-height:1;
+                            color:#FF0000;
+                        ">${teacherNo}</span>
+                    </div>
+                </td>`;
+                    weeklyTotal++;
+                } else {
+                    html += `<td style="border-bottom:4px solid #2c3e50;"></td>`;
+                }
             });
         });
         html += `</tr>`;
+
 
         // ជួរសរុបប្រចាំថ្នាក់
         html += `<tr style="background:#eaeded;">
@@ -963,24 +1013,26 @@ function renderMasterSchedule() {
         <div class="summary-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; padding: 10px; background: #f8f9f9; border: 1px solid #ccc;">`;
     
     for (let tName in teacherStats) {
-    const subListText = Object.entries(teacherStats[tName].subDetail)
-        .map(([subName, count]) => `${subName}: ${count}ម៉ោង`).join(', ');
+        // ទាញយកលេខសន្ទស្សន៍របស់គ្រូម្នាក់ៗពី teacherNumberMap
+        const teacherNo = teacherNumberMap[tName] ? `${teacherNumberMap[tName]}. ` : "";
 
-    // បង្កើតអត្ថបទបង្ហាញថ្នាក់ និងម៉ោងសរុបក្នុងថ្នាក់នោះ (ឧទាហរណ៍៖ ៩ក(៤ម៉ោង), ៨ខ(២ម៉ោង))
-    const classHourDetails = Array.from(teacherStats[tName].classes).sort().map(cName => {
-        // រាប់ចំនួនម៉ោងដែលគ្រូម្នាក់នេះ បង្រៀនក្នុងថ្នាក់នីមួយៗ
-        const hoursInClass = entries.filter(e => e.name === tName && e.className === cName).length;
-        return `${cName}(${hoursInClass}ម៉ោង)`;
-    }).join(', ');
+        const subListText = Object.entries(teacherStats[tName].subDetail)
+            .map(([subName, count]) => `${subName}: ${count}ម៉ោង`).join(', ');
 
-    html += `
-        <div class="summary-item" style="background:white; border:1px solid #ddd; padding:8px; border-radius:4px; box-shadow: 1px 1px 3px rgba(0,0,0,0.1);">
-            <strong style="color:#1a5276;">${tName} (${teacherStats[tName].gender})</strong><br>
-            <span style="color:red; font-weight:bold; font-size:11px;">សរុប៖ ${teacherStats[tName].total} ម៉ោង</span><br>
-            <span style="font-size:9px; color:#2c3e50; font-weight:bold;">ថ្នាក់៖ ${classHourDetails}</span><br>
-            <span style="font-size:9px; color:#555; font-style:italic;">[ ${subListText} ]</span>
-        </div>`;
-}    
+        // បង្កើតអត្ថបទបង្ហាញថ្នាក់ និងម៉ោងសរុបក្នុងថ្នាក់នោះ
+        const classHourDetails = Array.from(teacherStats[tName].classes).sort().map(cName => {
+            const hoursInClass = entries.filter(e => e.name === tName && e.className === cName).length;
+            return `${cName}(${hoursInClass}ម៉ោង)`;
+        }).join(', ');
+
+        html += `
+            <div class="summary-item" style="background:white; border:1px solid #ddd; padding:8px; border-radius:4px; box-shadow: 1px 1px 3px rgba(0,0,0,0.1);">
+                <strong style="color:#1a5276;">${teacherNo}${tName} (${teacherStats[tName].gender})</strong><br>
+                <span style="color:red; font-weight:bold; font-size:11px;">សរុប៖ ${teacherStats[tName].total} ម៉ោង</span><br>
+                <span style="font-size:9px; color:#2c3e50; font-weight:bold;">ថ្នាក់៖ ${classHourDetails}</span><br>
+                <span style="font-size:9px; color:#555; font-style:italic;">[ ${subListText} ]</span>
+            </div>`;
+    }
     html += `</div></div></div>`;
     outer.innerHTML = html;
     }    // បង្កើតតារាងវត្តមានសម្រាប់គ្រូទាំងអស់ក្នុងមួយសប្តាហ៍
