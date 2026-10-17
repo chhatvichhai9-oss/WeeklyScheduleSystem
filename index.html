@@ -40,8 +40,8 @@
 
         .container h2 {
             color: #1e3a8a;
-            font-size: 24px;
-            margin-bottom: 20px;
+            font-size: 20px;
+            margin-bottom: 10px;
             font-weight: bold;
         }
 
@@ -125,11 +125,11 @@
 
     <div class="container">
         <div class="school-header">
-            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
             </svg>
             <h2>ប្រព័ន្ធបែងចែកកាលវិភាគ</h2>
-            <h2>Tel: 098981192/0973272123</h2>
+            <h3 style="font-size: 14px; color: #64748b; margin-bottom: 10px;">Tel: 098981192 / 0973272123</h3>
             <h2>School Login</h2>
         </div>
 
@@ -151,14 +151,37 @@
     </div>
 
     <script>
+        // កំណត់បញ្ជីគណនី (អ្នកអាចបន្ថែមឈ្មោះ និងលេខសម្ងាត់ផ្សេងៗនៅទីនេះបាន)
+        const validUsers = [
+            { username: "admin", password: "123456" },
+            { username: "teacher1", password: "456" },
+            { username: "teacher2", password: "789" }
+        ];
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
+            const inputUser = document.getElementById('username').value.trim();
+            const inputPass = document.getElementById('password').value.trim();
 
-            if (user === "admin" && pass === "123456") {
+            // ពិនិត្យមើលថាតើ Username និង Password ត្រូវនឹងគណនីណាមួយក្នុងបញ្ជីដែរឬទេ
+            const matchedUser = validUsers.find(u => u.username === inputUser && u.password === inputPass);
+
+            if (matchedUser) {
+                // ពិនិត្យមើលថាតើគណនីនេះកំពុងត្រូវ បាន Login រួចហើយឬនៅ (ផ្អែកលើ localStorage របស់ Browser)
+                const activeSession = localStorage.getItem("active_user_" + matchedUser.username);
+                
+                if (activeSession) {
+                    alert("គណនីនេះកំពុងត្រូវបានប្រើប្រាស់ដោយអ្នកផ្សេងរួចហើយ! មិនអាចចូលក្នុងពេលដំណាលគ្នាបានទេ។");
+                    return;
+                }
+
+                // កត់ត្រាថា គណនីនេះកំពុងងើបឡើងប្រើប្រាស់
+                localStorage.setItem("active_user_" + matchedUser.username, "true");
                 localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("currentUser", matchedUser.username);
+
+                // បញ្ជូនទៅកាន់ទំព័រដើម
                 window.location.href = "app.html";
             } else {
                 alert("ឈ្មោះ ឬ Password មិនត្រឹមត្រូវទេ!");
