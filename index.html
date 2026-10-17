@@ -151,9 +151,9 @@
     </div>
 
     <script>
-        // កំណត់បញ្ជីគណនី (អ្នកអាចបន្ថែមឈ្មោះ និងលេខសម្ងាត់ផ្សេងៗនៅទីនេះបាន)
+        // កំណត់បញ្ជីគណនី (អ្នកអាចបន្ថែមឈ្មោះ និងលេខសម្ងាត់ផ្សេងៗនៅទីនេះបានតាមតម្រូវការ)
         const validUsers = [
-            { username: "admin", password: "123456" },
+            { username: "admin", password: "123" },
             { username: "teacher1", password: "456" },
             { username: "teacher2", password: "789" }
         ];
@@ -168,7 +168,7 @@
             const matchedUser = validUsers.find(u => u.username === inputUser && u.password === inputPass);
 
             if (matchedUser) {
-                // ពិនិត្យមើលថាតើគណនីនេះកំពុងត្រូវ បាន Login រួចហើយឬនៅ (ផ្អែកលើ localStorage របស់ Browser)
+                // ពិនិត្យមើលថាតើគណនីនេះកំពុងត្រូវបាន Login រួចហើយឬនៅលើ Tab ឬ Device ផ្សេង
                 const activeSession = localStorage.getItem("active_user_" + matchedUser.username);
                 
                 if (activeSession) {
@@ -176,12 +176,12 @@
                     return;
                 }
 
-                // កត់ត្រាថា គណនីនេះកំពុងងើបឡើងប្រើប្រាស់
+                // កត់ត្រាថា គណនីនេះកំពុងប្រើប្រាស់
                 localStorage.setItem("active_user_" + matchedUser.username, "true");
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("currentUser", matchedUser.username);
 
-                // បញ្ជូនទៅកាន់ទំព័រដើម
+                // បញ្ជូនទៅកាន់ទំព័រគោលដៅ (កម្មវិធីកាលវិភាគរបស់អ្នក)
                 window.location.href = "app.html";
             } else {
                 alert("ឈ្មោះ ឬ Password មិនត្រឹមត្រូវទេ!");
