@@ -135,23 +135,17 @@
 
         /* កំណត់ឱ្យឈ្មោះគ្រូខាងក្នុងតារាងនៅខាងឆ្វេងដូចដើម */
         .attendance-table td:nth-child(2) { width: 80px; font-size: 11px !important; white-space: nowrap; text-align: left; padding-left: 5px; } /* ឈ្មោះគ្រូ */
-        .attendance-table th:nth-child(3), .attendance-table td:nth-child(3) { width: 15px; font-size: 11px !important; } /* ភេទ */
+        .attendance-table th:nth-child(3), .attendance-table td:nth-child(3) { width: 10px; font-size: 10px !important; } /* ភេទ */
         .attendance-table th:nth-child(4), .attendance-table td:nth-child(4) { width: 45px; font-size: 9px !important; } /* តួនាទី */
-        /* ម៉ោងព្រឹក ៤ ក្រឡា (១, ២, ៣, ៤) */
-        .attendance-table th:nth-child(5), .attendance-table td:nth-child(5) { width: 90px; }
-        .attendance-table th:nth-child(6), .attendance-table td:nth-child(6) { width: 90px; }
-        .attendance-table th:nth-child(7), .attendance-table td:nth-child(7) { width: 90px; }
-        .attendance-table th:nth-child(8), .attendance-table td:nth-child(8) { width: 90px; }
-        
-        /* ម៉ោងល្ងាច ៤ ក្រឡា (៥, ៦, ៧, ៨) */
-        .attendance-table th:nth-child(9), .attendance-table td:nth-child(9) { width: 90px; }
-        .attendance-table th:nth-child(10), .attendance-table td:nth-child(10) { width: 90px; }
-        .attendance-table th:nth-child(11), .attendance-table td:nth-child(11) { width: 90px; }
-        .attendance-table th:nth-child(12), .attendance-table td:nth-child(12) { width: 90px; }
+        /* កំណត់ឱ្យក្រឡាម៉ោងពេលព្រឹក និងពេលល្ងាចចែកទំហំស្មើគ្នាដោយស្វ័យប្រវត្តិ */
+        .attendance-table th.morning-slot, .attendance-table td.morning-slot,
+        .attendance-table th.afternoon-slot, .attendance-table td.afternoon-slot {
+            width: auto; font-size: 12px !important;
+        }
         /* អវត្តមាន និងផ្សេងៗ */
         .attendance-table th:nth-child(13), .attendance-table td:nth-child(13) { width: 10px; } /* ច្ប */
         .attendance-table th:nth-child(14), .attendance-table td:nth-child(14) { width: 10px; } /* អច្ប */
-        .attendance-table th:nth-child(15), .attendance-table td:nth-child(15) { width: 20px; } /* ផ្សេងៗ */
+        .attendance-table th:nth-child(15), .attendance-table td:nth-child(15) { width: 45px; } /* ផ្សេងៗ */
         
         .free-slot { background-color: #d1d1d1 !important; } 
         .busy-slot { background-color: #ffffff !important; }
@@ -1186,13 +1180,13 @@
                             </tr>
                             <tr>`;
                 
-                // បង្កើត លេខរៀងក្រឡាពេលព្រឹក (១, ២, ៣, ៤, ៥...)
+                // ក្រឡាពេលព្រឹក
                 for (let i = 1; i <= mCount; i++) {
-                    html += `<th style="text-align: center;">${i}</th>`;
+                    html += `<th class="morning-slot" style="text-align: center;">${i}</th>`;
                 }
-                // បង្កើត លេខរៀងក្រឡាពេលល្ងាចបន្តគ្នា
+                // ក្រឡាពេលល្ងាច
                 for (let i = 1; i <= aCount; i++) {
-                    html += `<th style="text-align: center;">${mCount + i}</th>`;
+                    html += `<th class="afternoon-slot" style="text-align: center;">${mCount + i}</th>`;
                 }
 
                 html += `
@@ -1209,11 +1203,16 @@
                     
                     html += `<tr><td>${i + 1}</td><td style="text-align:left; padding-left:5px;">${tName}</td><td>${tInfo.gender}</td><td>${role}</td>`;
                     
-                    // ពិនិត្យម៉ោងព្រឹក និងល្ងាចតាម slot ពិតប្រាកដ
-                    allSlots.forEach(slot => {
+                    morningSlots.forEach(slot => {
                         const hasTask = entries.find(e => e.name === tName && e.day === day && e.time === slot);
                         let slotClass = isTeacher ? (hasTask ? 'busy-slot' : 'free-slot') : 'busy-slot';
-                        html += `<td class="${slotClass}"></td>`;
+                        html += `<td class="morning-slot ${slotClass}"></td>`;
+                    });
+
+                    afternoonSlots.forEach(slot => {
+                        const hasTask = entries.find(e => e.name === tName && e.day === day && e.time === slot);
+                        let slotClass = isTeacher ? (hasTask ? 'busy-slot' : 'free-slot') : 'busy-slot';
+                        html += `<td class="afternoon-slot ${slotClass}"></td>`;
                     });
                     
                     html += `<td></td><td></td><td></td></tr>`;
