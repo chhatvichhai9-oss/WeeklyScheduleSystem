@@ -260,8 +260,10 @@
                     <input type="text" id="directorName" placeholder="ឈ្មោះនាយក" oninput="saveMetaData()" style="width: 80px; font-size: 10px;border: 1px solid #e74c3c;">
                     <input type="text" id="chanDate" placeholder="ថ្ងៃចន្ទគតិ..." oninput="saveMetaData()" style="width: 240px; font-size: 10px;border: 1px solid #e74c3c;">
                     <input type="text" id="soriyaDate" placeholder="ថ្ងៃសូរិយគតិ..." oninput="saveMetaData()" style="width: 130px; font-size: 10px;border: 1px solid #e74c3c;">
-                    <button class="btn-clear" style="background-color: #d30a0a; font-size: 10px; padding: 3px 6px;" onclick="logoutUser()">🚪 ចាកចេញ (Log Out)</button>
-                <div class="school-input-group"></div>
+                
+                    <!-- 🚪 ប៊ូតុងចាកចេញដាក់នៅខាងក្រៅនេះវិញ -->
+                    <button type="button" class="btn-clear" style="background-color: #d30a0a; font-size: 10px; padding: 3px 6px;" onclick="logoutUser()">🚪 ចាកចេញ (Log Out)</button>
+                    <div class="school-input-group"></div>
                 </select>
             </div>
         </div>
@@ -1491,12 +1493,34 @@ window.onload = function() {
     updateCustomTimeSlots();
 };
 // មុខងារសម្រាប់ចាកចេញពីប្រព័ន្ធដោយរក្សាទុកទិន្នន័យដដែល
+   // 🔗 URL Cloud Sync)
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzUySPIXix6B5ZJ_DRzA2sWOeUTCcDgK8y616Kg4rdg4iqXXKcwZU8m0MnJXK_Q_75h/exec';
+
+    async function saveDataToCloud() {
+        const currentUser = localStorage.getItem("currentUser");
+        if (!currentUser) return;
+
+        try {
+            await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: JSON.stringify({
+                    username: currentUser,
+                    entries: entries
+                })
+            });
+        } catch (err) {
+            console.error("Cloud Save Error:", err);
+        }
+    }
+
+    // មុខងារសម្រាប់ចាកចេញពីប្រព័ន្ធដោយត្រឡប់ទៅទំព័រ Login វិញ
     async function logoutUser() {
         if (confirm("តើលោកគ្រូ/អ្នកគ្រូពិតជាចង់ចាកចេញពីប្រព័ន្ធមែនទេ?")) {
-            // ធ្វើការ Sync ទិន្នន័យចុងក្រោយឡើងទៅ Cloud (Google Sheet) មុននឹងចេញ
+            // ព្យាយាម Sync ទិន្នន័យ (បើមានភ្ជាប់បណ្តាញ)
             await saveDataToCloud();
             
-            // លុបស្ថានភាព Active របស់ User នេះចេញ
+            // លុប Session ជាក់លាក់របស់ User
             const currentUser = localStorage.getItem("currentUser");
             if (currentUser) {
                 localStorage.removeItem("active_user_" + currentUser);
@@ -1504,8 +1528,8 @@ window.onload = function() {
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("currentUser");
 
-            // ត្រឡប់ទៅកាន់ទំព័រ Login វិញដោយស្វ័យប្រវត្តិ
-            window.location.replace("index.html");
+            // 🚀 បង្ខំឱ្យប្តូរទំព័រទៅកាន់ index.html យ៉ាងពិតប្រាកដ
+            window.location.href = "index.html";
         }
     }
 </script>
