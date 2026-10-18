@@ -1496,7 +1496,7 @@ window.onload = function() {
             // ធ្វើការ Sync ទិន្នន័យចុងក្រោយឡើងទៅ Cloud (Google Sheet) មុននឹងចេញ
             await saveDataToCloud();
             
-            // លុបស្ថានភាព Active របស់ User នេះចេញពី Session តែមិនលុប teacherTasks ទេ
+            // លុបស្ថានភាព Active របស់ User នេះចេញ
             const currentUser = localStorage.getItem("currentUser");
             if (currentUser) {
                 localStorage.removeItem("active_user_" + currentUser);
@@ -1504,8 +1504,8 @@ window.onload = function() {
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("currentUser");
 
-            // ត្រឡប់ទៅកាន់ទំព័រ Login វិញ
-            window.location.href = "index.html";
+            // ត្រឡប់ទៅកាន់ទំព័រ Login វិញដោយស្វ័យប្រវត្តិ
+            window.location.replace("index.html");
         }
     }
 </script>
