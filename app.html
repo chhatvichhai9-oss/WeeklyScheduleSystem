@@ -249,9 +249,9 @@
                         <input type="file" id="importExcel" style="display:none" accept=".xlsx, .xls" onchange="importFromExcel(event)">
                     </div>
                 <div class="school-input-group"></div>
-                    <button class="btn-clear" style="background-color: #dc0707; font-size: 11px; padding: 3px 10px;" onclick="clearAllData()">🗑️ លុបទាំងអស់</button> 
-                    <button class="btn-print" style="font-size: 11px; padding: 3px 10px;" onclick="window.print()">🖨️ បោះពុម្ព</button>
-                    <button class="btn-print" style="background-color: #870ebb; font-size: 11px; padding: 3px 10px;" onclick="openAdvancedModal()">⚙️ កំណត់កម្រិតខ្ពស់ & ចែកម៉ោងស្វ័យប្រវត្តិ</button>
+                    <button class="btn-clear" style="background-color: #dc0707; font-size: 11px; padding: 3px 6px;" onclick="clearAllData()">🗑️ លុបទាំងអស់</button> 
+                    <button class="btn-print" style="font-size: 11px; padding: 3px 6px;" onclick="window.print()">🖨️ បោះពុម្ព</button>
+                    <button class="btn-print" style="background-color: #870ebb; font-size: 11px; padding: 3px 6px;" onclick="openAdvancedModal()">⚙️ កំណត់កម្រិតខ្ពស់ & ចែកម៉ោងស្វ័យប្រវត្តិ</button>
                     <select id="schoolName" onchange="saveMetaData()" style="width: 140px; font-size: 10px; padding: 3px 6px; border: 1px solid #ff1a01;">
                     <option value="">សូមជ្រើសរើស........</option>
                     <option value="អនុវិទ្យាល័យខ្ញុំបាទ/នាងខ្ញុំ">អនុវិទ្យាល័យខ្ញុំបាទ/នាងខ្ញុំ</option>
@@ -260,6 +260,7 @@
                     <input type="text" id="directorName" placeholder="ឈ្មោះនាយក" oninput="saveMetaData()" style="width: 80px; font-size: 10px;border: 1px solid #e74c3c;">
                     <input type="text" id="chanDate" placeholder="ថ្ងៃចន្ទគតិ..." oninput="saveMetaData()" style="width: 240px; font-size: 10px;border: 1px solid #e74c3c;">
                     <input type="text" id="soriyaDate" placeholder="ថ្ងៃសូរិយគតិ..." oninput="saveMetaData()" style="width: 130px; font-size: 10px;border: 1px solid #e74c3c;">
+                    <button class="btn-clear" style="background-color: #d30a0a; font-size: 10px; padding: 3px 6px;" onclick="logoutUser()">🚪 ចាកចេញ (Log Out)</button>
                 <div class="school-input-group"></div>
                 </select>
             </div>
@@ -1489,6 +1490,24 @@ window.onload = function() {
     }
     updateCustomTimeSlots();
 };
+// មុខងារសម្រាប់ចាកចេញពីប្រព័ន្ធដោយរក្សាទុកទិន្នន័យដដែល
+    async function logoutUser() {
+        if (confirm("តើលោកគ្រូ/អ្នកគ្រូពិតជាចង់ចាកចេញពីប្រព័ន្ធមែនទេ?")) {
+            // ធ្វើការ Sync ទិន្នន័យចុងក្រោយឡើងទៅ Cloud (Google Sheet) មុននឹងចេញ
+            await saveDataToCloud();
+            
+            // លុបស្ថានភាព Active របស់ User នេះចេញពី Session តែមិនលុប teacherTasks ទេ
+            const currentUser = localStorage.getItem("currentUser");
+            if (currentUser) {
+                localStorage.removeItem("active_user_" + currentUser);
+            }
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("currentUser");
+
+            // ត្រឡប់ទៅកាន់ទំព័រ Login វិញ
+            window.location.href = "index.html";
+        }
+    }
 </script>
 </body>
 </html>
