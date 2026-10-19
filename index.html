@@ -123,9 +123,8 @@
   <!-- Firebase App & Authentication SDKs (Modular Script via CDN) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    // Your web app's Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyB6sPqsdVZ9pFerzOj5Kz2pX-MVsdwGKzY",
       authDomain: "school-login-system-378d1.firebaseapp.com",
@@ -136,17 +135,15 @@
       measurementId: "G-EFBHN1D85M"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // ដំណើរការបំពេញទម្រង់ Login
     const loginForm = document.getElementById('loginForm');
     const messageDiv = document.getElementById('message');
 
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('email').value;
+      const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
 
       messageDiv.style.color = '#2563eb';
@@ -155,13 +152,39 @@
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const user = userCredential.user;
+
+          // --- 🔒 ប្រព័ន្ធទប់ស្កាត់មិនឱ្យ Login លើសពី ១ ម៉ាស៊ីន ---
+          // ពិនិត្យមើលថាតើ Email នេះ មាន Active នៅលើ Browser ផ្សេងរួចហើយឬยัง (តាមរយៈ localStorage)
+          const activeSessionDevice = localStorage.getItem("active_device_" + user.email);
+          const currentBrowserSession = sessionStorage.getItem("current_browser_token");
+
+          // បើបង្កើត Token ប្រចាំ Browser នេះមិនទាន់មាន គឺបង្កើតថ្មីមួយ
+          let browserToken = currentBrowserSession;
+          if (!browserToken) {
+            browserToken = 'dev_' + Math.random().toString(36).substring(2) + Date.now();
+            sessionStorage.setItem("current_browser_token", browserToken);
+          }
+
+          // បើមានម៉ាស៊ីនផ្សេងទៀតធ្លាប់ Login ទុក ហើយ Token មិនមែនជាម៉ាស៊ីនបច្ចុប្បន្ន 
+          // (អាចទាមទារឱ្យបិទម៉ាស៊ីនមុន ឬបដិសេធមិនឱ្យចូល)
+          // ទីនេះយើងកំណត់ថា បើមានម៉ាស៊ីនផ្សេងបើកอยู่ វានឹងតម្រូវឱ្យ Logout ម៉ាស៊ីនចាស់ ឬបដិសេធ
+          if (activeSessionDevice && activeSessionDevice !== browserToken) {
+            // ពិនិត្យបន្ថែម៖ បើចង់ឱ្យវា Force Login ថ្មី និងទាត់ម៉ាស៊ីនចាស់ចោល អាចរំលងកូដនេះបាន
+            // ប៉ុន្តែបើចង់ "បដិសេធ" មិនឱ្យ Login ព្រោះកំពុងបើកលើកុំព្យូទ័រផ្សេង៖
+            messageDiv.style.color = '#dc2626';
+            messageDiv.innerText = "⚠️ បរាជ័យ៖ គណនីនេះកំពុងត្រូវបានបើកប្រើប្រាស់នៅលើកុំព្យូទ័រផ្សេងរួចហើយ!";
+            signOut(auth); // Sign out វិញភ្លាម
+            return;
+          }
+
+          // រក្សាទុកសិទ្ធិម៉ាស៊ីននេះថាជាម៉ាស៊ីនតែមួយគត់ដែលកំពុង Active
+          localStorage.setItem("active_device_" + user.email, browserToken);
+          sessionStorage.setItem("currentUser", user.email);
+          // ----------------------------------------------------
+
           messageDiv.style.color = '#16a34a';
           messageDiv.innerText = "ចូលប្រព័ន្ធជោគជ័យ! កំពុងចូលទៅកាន់ប្រព័ន្ធ...";
           
-          // រក្សាទុក User ក្នុង Session Storage
-          sessionStorage.setItem("currentUser", user.email);
-
-          // បន្ទាប់ពី Login ជោគជ័យ ឱ្យវាលោតទៅកាន់ទំព័រ app.html
           setTimeout(() => {
             window.location.href = "app.html";
           }, 1000);
