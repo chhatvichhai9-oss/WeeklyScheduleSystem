@@ -1533,5 +1533,43 @@ window.onload = function() {
         }
     }
 </script>
+    <!-- កូដ Heartbeat សម្រាប់រក្សាសិទ្ធិ Single Device -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB6sPqsdVZ9pFerzOj5Kz2pX-MVsdwGKzY",
+      authDomain: "school-login-system-378d1.firebaseapp.com",
+      projectId: "school-login-system-378d1",
+      storageBucket: "school-login-system-378d1.firebasestorage.app",
+      messagingSenderId: "1014509963808",
+      appId: "1:1014509963808:web:362a6b20144033a267ca45",
+      measurementId: "G-EFBHN1D85M"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function updateHeartbeat() {
+      const currentUser = sessionStorage.getItem("currentUser");
+      const deviceId = localStorage.getItem("my_device_id");
+
+      if (currentUser && deviceId) {
+        const safeEmailKey = currentUser.replace(/[.#$[\]]/g, "_");
+        try {
+          await setDoc(doc(db, "active_sessions", safeEmailKey), {
+            deviceId: deviceId,
+            lastActive: Date.now()
+          }, { merge: true });
+        } catch (err) {
+          console.error("Heartbeat error:", err);
+        }
+      }
+    }
+
+    setInterval(updateHeartbeat, 60000); // អាប់ដេតរៀងរាល់ ១ នាទី
+    updateHeartbeat();
+  </script>
 </body>
 </html>
