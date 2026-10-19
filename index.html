@@ -1,192 +1,88 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Login Form</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #38bdf8 100%);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .container {
-            background: #ffffff;
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            z-index: 10;
-            margin: 20px;
-        }
-
-        .school-header {
-            margin-bottom: 20px;
-        }
-
-        .container h2 {
-            color: #1e3a8a;
-            font-size: 20px;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px 15px 14px 45px;
-            border: 1px solid #cbd5e1;
-            border-radius: 12px;
-            outline: none;
-            font-size: 15px;
-            background-color: #f8fafc;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus {
-            border-color: #2563eb;
-            background-color: #fff;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .input-group::before {
-            font-family: sans-serif;
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #64748b;
-            font-size: 18px;
-        }
-
-        .input-group.user::before {
-            content: "👤";
-        }
-
-        .input-group.pass::before {
-            content: "🔒";
-        }
-
-        .remember-forgot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-            margin-bottom: 20px;
-            color: #64748b;
-        }
-
-        .remember-forgot a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .remember-forgot a:hover {
-            text-decoration: underline;
-        }
-
-        .btn-signin {
-            width: 100%;
-            padding: 14px;
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .btn-signin:hover {
-            background-color: #1d4ed8;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Login System</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f6f9; margin: 0; }
+    .login-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
+    .login-card h2 { margin-bottom: 20px; color: #333; }
+    .input-group { margin-bottom: 15px; text-align: left; }
+    .input-group label { display: block; margin-bottom: 5px; font-size: 14px; color: #666; }
+    .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; background-color: #1a73e8; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+    button:hover { background-color: #1557b0; }
+    #message { margin-top: 15px; font-size: 14px; }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="school-header">
-            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
-            </svg>
-            <h2>ប្រព័ន្ធបែងចែកកាលវិភាគ</h2>
-            <h3 style="font-size: 14px; color: #64748b; margin-bottom: 10px;">Tel: 098981192 / 0973272123</h3>
-            <h2>School Login</h2>
-        </div>
+  <div class="login-card">
+    <h2>ចូលប្រព័ន្ធ (Login)</h2>
+    <form id="loginForm">
+      <div class="input-group">
+        <label for="email">អ៊ីមែល</label>
+        <input type="email" id="email" required placeholder="example@school.edu">
+      </div>
+      <div class="input-group">
+        <label for="password">ពាក្យសម្ងាត់</label>
+        <input type="password" id="password" required placeholder="••••••••">
+      </div>
+      <button type="submit" id="btnLogin">ចូលប្រើប្រាស់</button>
+    </form>
+    <div id="message"></div>
+  </div>
 
-        <form id="loginForm">
-            <div class="input-group user">
-                <input type="text" id="username" placeholder="Full Name or Username" required>
-            </div>
-            <div class="input-group pass">
-                <input type="password" id="password" placeholder="Password" required>
-            </div>
+  <!-- Firebase App & Authentication SDKs (Modular Script via CDN) -->
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-            <div class="remember-forgot">
-                <label><input type="checkbox"> Remember me</label>
-                <a href="#">Forgot password?</a>
-            </div>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyB6sPqsdVZ9pFerzOj5Kz2pX-MVsdwGKzY",
+      authDomain: "school-login-system-378d1.firebaseapp.com",
+      projectId: "school-login-system-378d1",
+      storageBucket: "school-login-system-378d1.firebasestorage.app",
+      messagingSenderId: "1014509963808",
+      appId: "1:1014509963808:web:362a6b20144033a267ca45",
+      measurementId: "G-EFBHN1D85M"
+    };
 
-            <button type="submit" class="btn-signin">Submit</button>
-        </form>
-    </div>
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    <script>
-        // កំណត់បញ្ជីគណនី (អ្នកអាចបន្ថែមឈ្មោះ និងលេខសម្ងាត់ផ្សេងៗនៅទីនេះបានតាមតម្រូវការ)
-        const validUsers = [
-            { username: "admin1", password: "1234" },
-            { username: "teacher1", password: "1111" },
-            { username: "teacher2", password: "2222" }
-        ];
+    // ដំណើរការបំពេញទម្រង់ Login
+    const loginForm = document.getElementById('loginForm');
+    const messageDiv = document.getElementById('message');
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const inputUser = document.getElementById('username').value.trim();
-            const inputPass = document.getElementById('password').value.trim();
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
-            // ពិនិត្យមើលថាតើ Username និង Password ត្រូវនឹងគណនីណាមួយក្នុងបញ្ជីដែរឬទេ
-            const matchedUser = validUsers.find(u => u.username === inputUser && u.password === inputPass);
+      messageDiv.style.color = 'blue';
+      messageDiv.innerText = "កំពុងផ្ទៀងផ្ទាត់...";
 
-            if (matchedUser) {
-                // ពិនិត្យមើលថាតើគណនីនេះកំពុងត្រូវបាន Login រួចហើយឬនៅលើ Tab ឬ Device ផ្សេង
-                const activeSession = localStorage.getItem("active_user_" + matchedUser.username);
-                
-                if (activeSession) {
-                    alert("គណនីនេះកំពុងត្រូវបានប្រើប្រាស់ដោយអ្នកផ្សេងរួចហើយ! មិនអាចចូលប្រើបានទេ។ សូមទាក់ទងតាមលេខទូរស័ព្ទ 098981192 / 0973272123 ដើម្បីទទួលបានជំនួយ សូមអរគុណ។");
-                    return;
-                }
-
-                // កត់ត្រាថា គណនីនេះកំពុងប្រើប្រាស់
-                localStorage.setItem("active_user_" + matchedUser.username, "true");
-                localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("currentUser", matchedUser.username);
-
-                // បញ្ជូនទៅកាន់ទំព័រគោលដៅ (កម្មវិធីកាលវិភាគរបស់អ្នក)
-                window.location.href = "app.html";
-            } else {
-                alert("ឈ្មោះ ឬ Password មិនត្រឹមត្រូវទេ!");
-            }
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          messageDiv.style.color = 'green';
+          messageDiv.innerText = "ចូលប្រព័ន្ធជោគជ័យ! ស្វាគមន៍ " + user.email;
+          
+          // បន្ទាប់ពី Login ជោគជ័យ ឱ្យវាលោតទៅកាន់ទំព័រ app.html របស់អ្នក
+          setTimeout(() => {
+            window.location.href = "app.html";
+          }, 1000);
+        })
+        .catch((error) => {
+          messageDiv.style.color = 'red';
+          messageDiv.innerText = "បរាជ័យ៖ " + error.message;
         });
-    </script>
+    });
+  </script>
 </body>
 </html>
