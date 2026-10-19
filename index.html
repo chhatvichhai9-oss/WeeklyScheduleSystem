@@ -143,11 +143,11 @@
     const loginForm = document.getElementById('loginForm');
     const messageDiv = document.getElementById('message');
 
-    // បង្កើត Device ID ពិសេសសម្រាប់ Browser/ឧបករណ៍នីមួយៗ
-    let deviceId = localStorage.getItem("my_device_id");
+    // ប្រើប្រាស់ localStorage ថេរសម្រាប់ Device ID ដើម្បីកុំឱ្យវាប្តូរលេខរៀងរាល់ពេល Login ឡើងវិញ
+    let deviceId = localStorage.getItem("my_permanent_device_id");
     if (!deviceId) {
-      deviceId = 'dev_' + Math.random().toString(36).substring(2) + Date.now();
-      localStorage.setItem("my_device_id", deviceId);
+      deviceId = 'pc_dev_' + Math.random().toString(36).substring(2) + Date.now();
+      localStorage.setItem("my_permanent_device_id", deviceId);
     }
 
     loginForm.addEventListener('submit', async (e) => {
@@ -163,25 +163,27 @@
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // ២. ឆែកមើលក្នុង Cloud Firestore Database ថាតើមានឧបករណ៍ផ្សេងកំពុង Login ស្រាប់ ឬអត់
+        // ២. ពិនិត្យស្ថានភាពនៅក្នុង Cloud Firestore Database
         const safeEmailKey = email.replace(/[.#$[\]]/g, "_");
         const sessionRef = doc(db, "active_sessions", safeEmailKey);
         const sessionSnap = await getDoc(sessionRef);
 
         const currentTime = Date.now();
-        const timeoutLimit = 5 * 60 * 1000; // កំណត់ពេល ៥នាទី (បើគ្មានសកម្មភាពចាត់ទុកថាផុតកំណត់)
+        const timeoutLimit = 3 * 60 * 1000; // កំណត់ត្រឹម ៣ នាទី (បើគ្មាន Heartbeat ពីម៉ាស៊ីនចាស់ ចាត់ទុកថាឈប់ប្រើ)
 
         if (sessionSnap.exists()) {
           const sessionData = sessionSnap.data();
+          
+          // បើជា Device ផ្សេង ហើយម៉ាស៊ីនចាស់នៅមានសកម្មភាព (Active ក្នុងអំឡុងពេលកំណត់) គឺប្លុកចោល
           if (sessionData.deviceId !== deviceId && (currentTime - sessionData.lastActive < timeoutLimit)) {
             messageDiv.style.color = '#dc2626';
             messageDiv.innerText = "⚠️ បរាជ័យ៖ គណនីនេះកំពុងត្រូវបានបើកប្រើប្រាស់នៅលើឧបករណ៍ផ្សេងរួចហើយ!";
-            await signOut(auth); // Sign out ចោលភ្លាម
+            await signOut(auth); // បដិសេធមិនឱ្យចូល
             return;
           }
         }
 
-        // ៣. រក្សាទុក Device ID នេះចូល Cloud Database
+        // ៣. បើកចូលបាន ធ្វើការកត់ត្រា Device ID នេះចូល Cloud Database
         await setDoc(sessionRef, {
           deviceId: deviceId,
           lastActive: currentTime
