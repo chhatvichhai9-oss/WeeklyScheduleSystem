@@ -1,33 +1,119 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>School Login System</title>
-  <style>
-    body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f6f9; margin: 0; }
-    .login-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
-    .login-card h2 { margin-bottom: 20px; color: #333; }
-    .input-group { margin-bottom: 15px; text-align: left; }
-    .input-group label { display: block; margin-bottom: 5px; font-size: 14px; color: #666; }
-    .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-    button { width: 100%; padding: 10px; background-color: #1a73e8; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
-    button:hover { background-color: #1557b0; }
-    #message { margin-top: 15px; font-size: 14px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Login System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Moul&family=Kantumruy+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Kantumruy Pro', Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background-color: #bfe3f8; /* ពណ៌ផ្ទៃខាងក្រោយខៀវស្រទន់ដូចរូបដើម */
+            margin: 0; 
+        }
+        .login-card { 
+            background: white; 
+            padding: 40px 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 400px; 
+            text-align: center; 
+        }
+        .logo-icon {
+            font-size: 38px;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+        .login-card h2 { 
+            font-family: 'Moul', serif;
+            font-size: 15px;
+            color: #1a5276; 
+            margin-bottom: 6px; 
+        }
+        .sub-tel {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .system-title {
+            font-family: 'Moul', serif;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+        .input-group { 
+            margin-bottom: 18px; 
+            text-align: left; 
+        }
+        .input-group label { 
+            display: block; 
+            margin-bottom: 6px; 
+            font-size: 13px; 
+            color: #333; 
+            font-weight: bold; 
+        }
+        .input-group input { 
+            width: 100%; 
+            padding: 11px 14px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-family: 'Kantumruy Pro', sans-serif;
+            font-size: 13px;
+            outline: none;
+            transition: 0.2s;
+        }
+        .input-group input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        button { 
+            width: 100%; 
+            padding: 12px; 
+            background-color: #2563eb; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            font-family: 'Moul', serif;
+            font-size: 13px; 
+            cursor: pointer; 
+            transition: background-color 0.2s;
+            margin-top: 5px;
+        }
+        button:hover { 
+            background-color: #1d4ed8; 
+        }
+        #message { 
+            margin-top: 15px; 
+            font-size: 13px; 
+            font-weight: bold; 
+        }
+    </style>
 </head>
 <body>
 
   <div class="login-card">
-    <h2>ចូលប្រព័ន្ធ (Login)</h2>
+    <div class="logo-icon">🏛️</div>
+    <h2>ប្រព័ន្ធបែងចែកកាលវិភាគ</h2>
+    <div class="sub-tel">Tel: 098981192 / 0973272123</div>
+    <div class="system-title">School Login</div>
+
     <form id="loginForm">
       <div class="input-group">
-        <label for="email">អ៊ីមែល</label>
-        <input type="email" id="email" required placeholder="example@school.edu">
+        <label for="email">អ៊ីមែល (Email)</label>
+        <input type="email" id="email" required placeholder="👤 example@school.edu">
       </div>
       <div class="input-group">
-        <label for="password">ពាក្យសម្ងាត់</label>
-        <input type="password" id="password" required placeholder="••••••••">
+        <label for="password">ពាក្យសម្ងាត់ (Password)</label>
+        <input type="password" id="password" required placeholder="🔒 password">
       </div>
       <button type="submit" id="btnLogin">ចូលប្រើប្រាស់</button>
     </form>
@@ -36,7 +122,6 @@
 
   <!-- Firebase App & Authentication SDKs (Modular Script via CDN) -->
   <script type="module">
-    // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
@@ -64,23 +149,26 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      messageDiv.style.color = 'blue';
+      messageDiv.style.color = '#2563eb';
       messageDiv.innerText = "កំពុងផ្ទៀងផ្ទាត់...";
 
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const user = userCredential.user;
-          messageDiv.style.color = 'green';
-          messageDiv.innerText = "ចូលប្រព័ន្ធជោគជ័យ! ស្វាគមន៍ " + user.email;
+          messageDiv.style.color = '#16a34a';
+          messageDiv.innerText = "ចូលប្រព័ន្ធជោគជ័យ! កំពុងចូលទៅកាន់ប្រព័ន្ធ...";
           
-          // បន្ទាប់ពី Login ជោគជ័យ ឱ្យវាលោតទៅកាន់ទំព័រ app.html របស់អ្នក
+          // រក្សាទុក User ក្នុង Session Storage
+          sessionStorage.setItem("currentUser", user.email);
+
+          // បន្ទាប់ពី Login ជោគជ័យ ឱ្យវាលោតទៅកាន់ទំព័រ app.html
           setTimeout(() => {
             window.location.href = "app.html";
           }, 1000);
         })
         .catch((error) => {
-          messageDiv.style.color = 'red';
-          messageDiv.innerText = "បរាជ័យ៖ " + error.message;
+          messageDiv.style.color = '#dc2626';
+          messageDiv.innerText = "បរាជ័យ៖ អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវឡើយ។";
         });
     });
   </script>
