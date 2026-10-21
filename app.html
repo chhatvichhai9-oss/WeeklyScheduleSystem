@@ -391,27 +391,31 @@
         <h3 style="color: #1a5276; font-family: 'Khmer OS Muol Light'; text-align: center; margin-top: 0;">ការកំណត់គ្រូ មុខវិជ្ជា និងចែកកាលវិភាគស្វ័យប្រវត្តិ</h3>
         
         <!-- ព័ត៌មានគ្រូ -->
-        <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr 1.5fr; gap: 10px; margin-bottom: 10px;">
-            <div>
-                <label style="font-weight: bold; font-size: 11px;">ឈ្មោះលោកគ្រូ/អ្នកគ្រូ៖</label>
-                <input type="text" id="advTeacherName" placeholder="ឧ. ឆាត វិឆៃ" style="width: 100%; margin-top: 3px;">
-            </div>
-            <div>
-                <label style="font-weight: bold; font-size: 11px;">ភេទ៖</label>
-                <select id="advGender" style="width: 100%; margin-top: 3px;">
-                    <option value="ប្រុស">ប្រុស</option>
-                    <option value="ស្រី">ស្រី</option>
-                </select>
-            </div>
-            <div>
-                <label style="font-weight: bold; font-size: 11px;">លេខទូរស័ព្ទ៖</label>
-                <input type="text" id="advPhone" placeholder="ឧ. 098981192" style="width: 100%; margin-top: 3px;">
-            </div>
-            <div>
-                <label style="font-weight: bold; font-size: 11px;">តួនាទី៖</label>
-                <input type="text" id="advRole" placeholder="ឧ. គ្រូបង្រៀន" style="width: 100%; margin-top: 3px;">
-            </div>
-        </div>
+<div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr 1.5fr 1.5fr; gap: 8px; margin-bottom: 10px;">
+    <div>
+        <label style="font-weight: bold; font-size: 11px;">ឈ្មោះលោកគ្រូ/អ្នកគ្រូ៖</label>
+        <input type="text" id="advTeacherName" placeholder="ឧ. ឆាត វិឆៃ" style="width: 100%; margin-top: 3px;">
+    </div>
+    <div>
+        <label style="font-weight: bold; font-size: 11px;">ភេទ៖</label>
+        <select id="advGender" style="width: 100%; margin-top: 3px;">
+            <option value="ប្រុស">ប្រុស</option>
+            <option value="ស្រី">ស្រី</option>
+        </select>
+    </div>
+    <div>
+        <label style="font-weight: bold; font-size: 11px;">លេខទូរស័ព្ទ៖</label>
+        <input type="text" id="advPhone" placeholder="ឧ. 098981192" style="width: 100%; margin-top: 3px;">
+    </div>
+    <div>
+        <label style="font-weight: bold; font-size: 11px;">តួនាទី៖</label>
+        <input type="text" id="advRole" placeholder="ឧ. គ្រូបង្រៀន" style="width: 100%; margin-top: 3px;">
+    </div>
+    <div>
+        <label style="font-weight: bold; font-size: 11px; color: #c0392b;">ថ្នាក់បន្ទុក (បើមាន)៖</label>
+        <input type="text" id="advHomeroomClass" placeholder="ឧ. ៩ក (បើគ្មានទុកទទេ)" style="width: 100%; margin-top: 3px; border: 1px solid #c0392b;">
+    </div>
+</div>
 
         <!-- បញ្ជីមុខវិជ្ជា និងថ្នាក់តាមជួរដេក -->
         <div style="margin-top: 10px;">
@@ -633,7 +637,8 @@
         const name = document.getElementById('advTeacherName').value.trim();
         const gender = document.getElementById('advGender').value;
         const phone = document.getElementById('advPhone').value.trim();
-        const role = document.getElementById('advRole').value.trim() || "គ្រូបង្រៀន";
+        const baseRole = document.getElementById('advRole').value.trim() || "គ្រូបង្រៀន";
+        const homeroomClass = document.getElementById('advHomeroomClass').value.trim(); // ថ្នាក់បន្ទុក
         const blockHours = parseInt(document.getElementById('advBlockHours').value) || 1;
         const session = document.getElementById('advTimeSession').value;
 
@@ -688,6 +693,12 @@
             const numberOfBlocks = hours / blockHours;
             const availableBlocks = [];
 
+            // កំណត់តួនាទីស្វ័យប្រវត្តិ៖ បើថ្នាក់ត្រូវគ្នានឹងថ្នាក់បន្ទុក ដាក់ "គ្រូបន្ទុកថ្នាក់" បើមិនត្រូវទេ ដាក់តួនាទីធម្មតា
+            let assignedRole = baseRole;
+            if (homeroomClass && homeroomClass.toLowerCase() === cName.toLowerCase()) {
+                assignedRole = "គ្រូបន្ទុកថ្នាក់";
+            }
+
             selectedDays.forEach(day => {
                 let groups = [];
                 if (session === 'morning') groups = [customMorning];
@@ -739,7 +750,7 @@
                         name: name,
                         gender: gender,
                         phone: phone,
-                        role: role,
+                        role: assignedRole,
                         day: block.day,
                         time: slot,
                         className: cName,
@@ -748,7 +759,7 @@
                 });
             });
 
-            assignedSummary.push(`ថ្នាក់ ${cName} - ${sub}: ${hours}ម៉ោង`);
+            assignedSummary.push(`ថ្នាក់ ${cName} - ${sub}: ${hours}ម៉ោង (តួនាទី៖ ${assignedRole})`);
         }
 
         localStorage.setItem('teacherTasks', JSON.stringify(entries));
