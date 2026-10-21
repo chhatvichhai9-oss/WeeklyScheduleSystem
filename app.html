@@ -289,6 +289,7 @@
                 <option value="Friday">ថ្ងៃសុក្រ</option><option value="Saturday">ថ្ងៃសៅរ៍</option>
             </select>
             <select id="timeSelect">
+                <option value="0:00 - 0:00">0:00 - 0:00 (ការិយាល័យ/រដ្ឋបាល)</option>
                 <option value="07:00 - 08:00">07:00 - 08:00</option><option value="08:00 - 09:00">08:00 - 09:00</option>
                 <option value="09:00 - 10:00">09:00 - 10:00</option><option value="10:00 - 11:00">10:00 - 11:00</option>
                 <option value="11:00 - 12:00">11:00 - 12:00</option><option value="12:00 - 13:00">12:00 - 13:00</option>
@@ -1470,7 +1471,9 @@ function updateCustomTimeSlots() {
 function updateTimeSelectDropdowns() {
     const timeSelect = document.getElementById('timeSelect');
     if (timeSelect) {
-        let html = '';
+        // បន្ថែមម៉ោង 0:00 - 0:00 ទុកជាស្រេចដំបូងគេបង្អស់
+        let html = '<option value="0:00 - 0:00">0:00 - 0:00 (ការិយាល័យ/រដ្ឋបាល)</option>';
+        
         allSlots.forEach(slot => {
             html += `<option value="${slot}">${slot}</option>`;
         });
