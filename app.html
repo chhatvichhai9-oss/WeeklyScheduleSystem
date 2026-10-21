@@ -391,7 +391,7 @@
         <h3 style="color: #1a5276; font-family: 'Khmer OS Muol Light'; text-align: center; margin-top: 0;">ការកំណត់គ្រូ មុខវិជ្ជា និងចែកកាលវិភាគស្វ័យប្រវត្តិ</h3>
         
         <!-- ព័ត៌មានគ្រូ -->
-        <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr 1.5fr 1.5fr; gap: 10px; margin-bottom: 10px;">
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr 1.5fr; gap: 10px; margin-bottom: 10px;">
             <div>
                 <label style="font-weight: bold; font-size: 11px;">ឈ្មោះលោកគ្រូ/អ្នកគ្រូ៖</label>
                 <input type="text" id="advTeacherName" placeholder="ឧ. ឆាត វិឆៃ" style="width: 100%; margin-top: 3px;">
@@ -411,116 +411,39 @@
                 <label style="font-weight: bold; font-size: 11px;">តួនាទី៖</label>
                 <input type="text" id="advRole" placeholder="ឧ. គ្រូបង្រៀន" style="width: 100%; margin-top: 3px;">
             </div>
-            <div>
-                <label style="font-weight: bold; font-size: 11px;">ថ្នាក់បង្រៀន៖</label>
-                <input type="text" id="advClassName" placeholder="ឧ. ៩ក" style="width: 100%; margin-top: 3px;">
-            </div>
         </div>
 
-        <!-- ជម្រើសមុខវិជ្ជា ៥ ក្រឡោន -->
-        <label style="font-weight: bold; font-size: 11px; color: #1a5276;">ជ្រើសរើសមុខវិជ្ជា និងចំនួនម៉ោង (បានរហូតដល់ ៥ មុខវិជ្ជា)៖</label>
-        <div class="sub-grid-5">
-            <div class="sub-box">
-                <strong style="font-size: 11px; color: #2c3e50;">មុខវិជ្ជាទី ១</strong>
-                <select id="advSub1" style="width: 100%; margin-top: 4px; font-size: 10.5px;">
-                    <option value="">-- ជ្រើសរើស --</option>
-                    <option value="ភាសាខ្មែរ(K)">ភាសាខ្មែរ(K)</option><option value="ពលរដ្ឋ(I)">ពលរដ្ឋ(I)</option>
-                    <option value="ភូមិវិទ្យា(G)">ភូមិវិទ្យា(G)</option><option value="ប្រវត្តិវិទ្យា(H)">ប្រវត្តិវិទ្យា(H)</option>
-                    <option value="គណិតវិទ្យា(M)">គណិតវិទ្យា(M)</option><option value="រូបវិទ្យា(P)">រូបវិទ្យា(P)</option>
-                    <option value="គីមីវិទ្យា(C)">គីមីវិទ្យា(C)</option><option value="ជីវវិទ្យា(B)">ជីវវិទ្យា(B)</option>
-                    <option value="ផែនដីវិទ្យា(Es)">ផែនដីវិទ្យា(Es)</option><option value="អង់គ្លេស(E)">អង់គ្លេស(E)</option>
-                    <option value="បារាំង(FR)">បារាំង(FR)</option><option value="គេហះ(He)">គេហះ(He)</option>
-                    <option value="បច្ចេកវិជ្ជា(ICT)">បច្ចេកវិជ្ជា(ICT)</option><option value="អប់រំសិល្បៈ(Art)">អប់រំសិល្បៈ(Art)</option>
-                    <option value="កីឡា(Ed)">កីឡា(Ed)</option><option value="អប់រំកាយ(PE)">អប់រំកាយ(PE)</option>
-                    <option value="បំណិន(LS)">បំណិន(LS)</option><option value="រោងជាង(WS)">រោងជាង(WS)</option>
-                    <option value="កសិកម្ម(Ag)">កសិកម្ម(Ag)</option><option value="សេដ្ឋកិច្ច(ECO)">សេដ្ឋកិច្ច(ECO)</option>
-                    <option value="សុខភាព(Hed)">សុខភាព(Hed)</option><option value="ជំនាញវិជ្ជាជីវៈ(VS)">ជំនាញវិជ្ជាជីវៈ(VS)</option>
-                    <option value="ICT">ICT</option><option value="ការិយាល័យ">ការិយាល័យ</option>
-                </select>
-                <input type="number" id="advHours1" min="0" placeholder="ចំនួនម៉ោង" style="width: 100%; margin-top: 4px; font-size: 10.5px;">
+        <!-- បញ្ជីមុខវិជ្ជា និងថ្នាក់តាមជួរដេក -->
+        <div style="margin-top: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                <label style="font-weight: bold; font-size: 11px; color: #1a5276;">បញ្ជីថ្នាក់ មុខវិជ្ជា និងចំនួនម៉ោង (អាចបន្ថែមជួរបានតាមចិត្ត)៖</label>
+                <button type="button" onclick="addSubjectRow()" style="background: #2980b9; color: white; border: none; padding: 3px 8px; border-radius: 4px; font-size: 10.5px; cursor: pointer;">+ បន្ថែមជួរថ្នាក់ និងមុខវិជ្ជា</button>
             </div>
-
-            <div class="sub-box">
-                <strong style="font-size: 11px; color: #2c3e50;">មុខវិជ្ជាទី ២</strong>
-                <select id="advSub2" style="width: 100%; margin-top: 4px; font-size: 10.5px;">
-                    <option value="">-- ជ្រើសរើស --</option>
-                    <option value="ភាសាខ្មែរ(K)">ភាសាខ្មែរ(K)</option><option value="ពលរដ្ឋ(I)">ពលរដ្ឋ(I)</option>
-                    <option value="ភូមិវិទ្យា(G)">ភូមិវិទ្យា(G)</option><option value="ប្រវត្តិវិទ្យា(H)">ប្រវត្តិវិទ្យា(H)</option>
-                    <option value="គណិតវិទ្យា(M)">គណិតវិទ្យា(M)</option><option value="រូបវិទ្យា(P)">រូបវិទ្យា(P)</option>
-                    <option value="គីមីវិទ្យា(C)">គីមីវិទ្យា(C)</option><option value="ជីវវិទ្យា(B)">ជីវវិទ្យា(B)</option>
-                    <option value="ផែនដីវិទ្យា(Es)">ផែនដីវិទ្យា(Es)</option><option value="អង់គ្លេស(E)">អង់គ្លេស(E)</option>
-                    <option value="បារាំង(FR)">បារាំង(FR)</option><option value="គេហះ(He)">គេហះ(He)</option>
-                    <option value="បច្ចេកវិជ្ជា(ICT)">បច្ចេកវិជ្ជា(ICT)</option><option value="អប់រំសិល្បៈ(Art)">អប់រំសិល្បៈ(Art)</option>
-                    <option value="កីឡា(Ed)">កីឡា(Ed)</option><option value="អប់រំកាយ(PE)">អប់រំកាយ(PE)</option>
-                    <option value="បំណិន(LS)">បំណិន(LS)</option><option value="រោងជាង(WS)">រោងជាង(WS)</option>
-                    <option value="កសិកម្ម(Ag)">កសិកម្ម(Ag)</option><option value="សេដ្ឋកិច្ច(ECO)">សេដ្ឋកិច្ច(ECO)</option>
-                    <option value="សុខភាព(Hed)">សុខភាព(Hed)</option><option value="ជំនាញវិជ្ជាជីវៈ(VS)">ជំនាញវិជ្ជាជីវៈ(VS)</option>
-                    <option value="ICT">ICT</option><option value="ការិយាល័យ">ការិយាល័យ</option>
-                </select>
-                <input type="number" id="advHours2" min="0" placeholder="ចំនួនម៉ោង" style="width: 100%; margin-top: 4px; font-size: 10.5px;">
-            </div>
-
-            <div class="sub-box">
-                <strong style="font-size: 11px; color: #2c3e50;">មុខវិជ្ជាទី ៣</strong>
-                <select id="advSub3" style="width: 100%; margin-top: 4px; font-size: 10.5px;">
-                    <option value="">-- ជ្រើសរើស --</option>
-                    <option value="ភាសាខ្មែរ(K)">ភាសាខ្មែរ(K)</option><option value="ពលរដ្ឋ(I)">ពលរដ្ឋ(I)</option>
-                    <option value="ភូមិវិទ្យា(G)">ភូមិវិទ្យា(G)</option><option value="ប្រវត្តិវិទ្យា(H)">ប្រវត្តិវិទ្យា(H)</option>
-                    <option value="គណិតវិទ្យា(M)">គណិតវិទ្យា(M)</option><option value="រូបវិទ្យា(P)">រូបវិទ្យា(P)</option>
-                    <option value="គីមីវិទ្យា(C)">គីមីវិទ្យា(C)</option><option value="ជីវវិទ្យា(B)">ជីវវិទ្យា(B)</option>
-                    <option value="ផែនដីវិទ្យា(Es)">ផែនដីវិទ្យា(Es)</option><option value="អង់គ្លេស(E)">អង់គ្លេស(E)</option>
-                    <option value="បារាំង(FR)">បារាំង(FR)</option><option value="គេហះ(He)">គេហះ(He)</option>
-                    <option value="បច្ចេកវិជ្ជា(ICT)">បច្ចេកវិជ្ជា(ICT)</option><option value="អប់រំសិល្បៈ(Art)">អប់រំសិល្បៈ(Art)</option>
-                    <option value="កីឡា(Ed)">កីឡា(Ed)</option><option value="អប់រំកាយ(PE)">អប់រំកាយ(PE)</option>
-                    <option value="បំណិន(LS)">បំណិន(LS)</option><option value="រោងជាង(WS)">រោងជាង(WS)</option>
-                    <option value="កសិកម្ម(Ag)">កសិកម្ម(Ag)</option><option value="សេដ្ឋកិច្ច(ECO)">សេដ្ឋកិច្ច(ECO)</option>
-                    <option value="សុខភាព(Hed)">សុខភាព(Hed)</option><option value="ជំនាញវិជ្ជាជីវៈ(VS)">ជំនាញវិជ្ជាជីវៈ(VS)</option>
-                    <option value="ICT">ICT</option><option value="ការិយាល័យ">ការិយាល័យ</option>
-                </select>
-                <input type="number" id="advHours3" min="0" placeholder="ចំនួនម៉ោង" style="width: 100%; margin-top: 4px; font-size: 10.5px;">
-            </div>
-
-            <div class="sub-box">
-                <strong style="font-size: 11px; color: #2c3e50;">មុខវិជ្ជាទី ៤</strong>
-                <select id="advSub4" style="width: 100%; margin-top: 4px; font-size: 10.5px;">
-                    <option value="">-- ជ្រើសរើស --</option>
-                    <option value="ភាសាខ្មែរ(K)">ភាសាខ្មែរ(K)</option><option value="ពលរដ្ឋ(I)">ពលរដ្ឋ(I)</option>
-                    <option value="ភូមិវិទ្យា(G)">ភូមិវិទ្យា(G)</option><option value="ប្រវត្តិវិទ្យា(H)">ប្រវត្តិវិទ្យា(H)</option>
-                    <option value="គណិតវិទ្យា(M)">គណិតវិទ្យា(M)</option><option value="រូបវិទ្យា(P)">រូបវិទ្យា(P)</option>
-                    <option value="គីមីវិទ្យា(C)">គីមីវិទ្យា(C)</option><option value="ជីវវិទ្យា(B)">ជីវវិទ្យា(B)</option>
-                    <option value="ផែនដីវិទ្យា(Es)">ផែនដីវិទ្យា(Es)</option><option value="អង់គ្លេស(E)">អង់គ្លេស(E)</option>
-                    <option value="បារាំង(FR)">បារាំង(FR)</option><option value="គេហះ(He)">គេហះ(He)</option>
-                    <option value="បច្ចេកវិជ្ជា(ICT)">បច្ចេកវិជ្ជា(ICT)</option><option value="អប់រំសិល្បៈ(Art)">អប់រំសិល្បៈ(Art)</option>
-                    <option value="កីឡា(Ed)">កីឡា(Ed)</option><option value="អប់រំកាយ(PE)">អប់រំកាយ(PE)</option>
-                    <option value="បំណិន(LS)">បំណិន(LS)</option><option value="រោងជាង(WS)">រោងជាង(WS)</option>
-                    <option value="កសិកម្ម(Ag)">កសិកម្ម(Ag)</option><option value="សេដ្ឋកិច្ច(ECO)">សេដ្ឋកិច្ច(ECO)</option>
-                    <option value="សុខភាព(Hed)">សុខភាព(Hed)</option><option value="ជំនាញវិជ្ជាជីវៈ(VS)">ជំនាញវិជ្ជាជីវៈ(VS)</option>
-                    <option value="ICT">ICT</option><option value="ការិយាល័យ">ការិយាល័យ</option>
-                </select>
-                <input type="number" id="advHours4" min="0" placeholder="ចំនួនម៉ោង" style="width: 100%; margin-top: 4px; font-size: 10.5px;">
-            </div>
-
-            <div class="sub-box">
-                <strong style="font-size: 11px; color: #2c3e50;">មុខវិជ្ជាទី ៥</strong>
-                <select id="advSub5" style="width: 100%; margin-top: 4px; font-size: 10.5px;">
-                    <option value="">-- ជ្រើសរើស --</option>
-                    <option value="ភាសាខ្មែរ(K)">ភាសាខ្មែរ(K)</option><option value="ពលរដ្ឋ(I)">ពលរដ្ឋ(I)</option>
-                    <option value="ភូមិវិទ្យា(G)">ភូមិវិទ្យា(G)</option><option value="ប្រវត្តិវិទ្យា(H)">ប្រវត្តិវិទ្យា(H)</option>
-                    <option value="គណិតវិទ្យា(M)">គណិតវិទ្យា(M)</option><option value="រូបវិទ្យា(P)">រូបវិទ្យា(P)</option>
-                    <option value="គីមីវិទ្យា(C)">គីមីវិទ្យា(C)</option><option value="ជីវវិទ្យា(B)">ជីវវិទ្យា(B)</option>
-                    <option value="ផែនដីវិទ្យា(Es)">ផែនដីវិទ្យា(Es)</option><option value="អង់គ្លេស(E)">អង់គ្លេស(E)</option>
-                    <option value="បារាំង(FR)">បារាំង(FR)</option><option value="គេហះ(He)">គេហះ(He)</option>
-                    <option value="បច្ចេកវិជ្ជា(ICT)">បច្ចេកវិជ្ជា(ICT)</option><option value="អប់រំសិល្បៈ(Art)">អប់រំសិល្បៈ(Art)</option>
-                    <option value="កីឡា(Ed)">កីឡា(Ed)</option><option value="អប់រំកាយ(PE)">អប់រំកាយ(PE)</option>
-                    <option value="បំណិន(LS)">បំណិន(LS)</option><option value="រោងជាង(WS)">រោងជាង(WS)</option>
-                    <option value="កសិកម្ម(Ag)">កសិកម្ម(Ag)</option><option value="សេដ្ឋកិច្ច(ECO)">សេដ្ឋកិច្ច(ECO)</option>
-                    <option value="សុខភាព(Hed)">សុខភាព(Hed)</option><option value="ជំនាញវិជ្ជាជីវៈ(VS)">ជំនាញវិជ្ជាជីវៈ(VS)</option>
-                    <option value="ICT">ICT</option><option value="ការិយាល័យ">ការិយាល័យ</option>
-                </select>
-                <input type="number" id="advHours5" min="0" placeholder="ចំនួនម៉ោង" style="width: 100%; margin-top: 4px; font-size: 10.5px;">
+            
+            <div id="subjectRowsContainer" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; background: #eef2f5; padding: 8px; border-radius: 5px;">
+                <!-- ជួរទី១ (លំនាំដើម) -->
+                <div class="sub-row" style="display: grid; grid-template-columns: 2fr 3fr 1.5fr auto; gap: 6px; align-items: center;">
+                    <input type="text" class="row-class" placeholder="ថ្នាក់ (ឧ. ៩ក)" style="font-size: 10.5px; padding: 4px;">
+                    <select class="row-sub" style="font-size: 10.5px; padding: 4px;">
+                        <option value="">-- ជ្រើសរើសមុខវិជ្ជា --</option>
+                        <option value="ភាសាខ្មែរ(K)">ភាសាខ្មែរ(K)</option><option value="ពលរដ្ឋ(I)">ពលរដ្ឋ(I)</option>
+                        <option value="ភូមិវិទ្យា(G)">ភូមិវិទ្យា(G)</option><option value="ប្រវត្តិវិទ្យា(H)">ប្រវត្តិវិទ្យា(H)</option>
+                        <option value="គណិតវិទ្យា(M)">គណិតវិទ្យា(M)</option><option value="រូបវិទ្យា(P)">រូបវិទ្យា(P)</option>
+                        <option value="គីមីវិទ្យា(C)">គីមីវិទ្យា(C)</option><option value="ជីវវិទ្យា(B)">ជីវវិទ្យា(B)</option>
+                        <option value="ផែនដីវិទ្យា(Es)">ផែនដីវិទ្យា(Es)</option><option value="អង់គ្លេស(E)">អង់គ្លេស(E)</option>
+                        <option value="បារាំង(FR)">បារាំង(FR)</option><option value="គេហះ(He)">គេហះ(He)</option>
+                        <option value="បច្ចេកវិជ្ជា(ICT)">បច្ចេកវិជ្ជា(ICT)</option><option value="អប់រំសិល្បៈ(Art)">អប់រំសិល្បៈ(Art)</option>
+                        <option value="កីឡា(Ed)">កីឡា(Ed)</option><option value="អប់រំកាយ(PE)">អប់រំកាយ(PE)</option>
+                        <option value="បំណិន(LS)">បំណិន(LS)</option><option value="រោងជាង(WS)">រោងជាង(WS)</option>
+                        <option value="កសិកម្ម(Ag)">កសិកម្ម(Ag)</option><option value="សេដ្ឋកិច្ច(ECO)">សេដ្ឋកិច្ច(ECO)</option>
+                        <option value="សុខភាព(Hed)">សុខភាព(Hed)</option><option value="ជំនាញវិជ្ជាជីវៈ(VS)">ជំនាញវិជ្ជាជីវៈ(VS)</option>
+                        <option value="ICT">ICT</option><option value="ការិយាល័យ">ការិយាល័យ</option>
+                    </select>
+                    <input type="number" class="row-hours" min="1" placeholder="ចំនួនម៉ោង" style="font-size: 10.5px; padding: 4px;">
+                    <button type="button" onclick="removeSubjectRow(this)" style="background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px;">✕</button>
+                </div>
             </div>
         </div>
-
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
             <div>
                 <label style="font-weight: bold; font-size: 11px;">ទម្រង់ម៉ោងបង្រៀន៖</label>
@@ -700,11 +623,17 @@
     }
 
     function advancedAutoDivide() {
+        const currentSchool = document.getElementById('schoolName').value;
+        if (!currentSchool) {
+            alert("សូមមេត្តាជ្រើសរើស 'ឈ្មោះសាលា' ជាមុនសិន!");
+            document.getElementById('schoolName').focus();
+            return;
+        }
+
         const name = document.getElementById('advTeacherName').value.trim();
         const gender = document.getElementById('advGender').value;
         const phone = document.getElementById('advPhone').value.trim();
         const role = document.getElementById('advRole').value.trim() || "គ្រូបង្រៀន";
-        const cName = document.getElementById('advClassName').value.trim();
         const blockHours = parseInt(document.getElementById('advBlockHours').value) || 1;
         const session = document.getElementById('advTimeSession').value;
 
@@ -720,30 +649,40 @@
         const selectedDays = Array.from(checkboxes).map(cb => cb.value);
 
         if (!name) { alert("សូមបញ្ចូលឈ្មោះគ្រូ!"); return; }
-        if (!cName) { alert("សូមបញ្ចូលថ្នាក់!"); return; }
         if (selectedDays.length === 0) { alert("សូមជ្រើសរើសយ៉ាងហោចណាស់ ១ ថ្ងៃ!"); return; }
 
-        let subjectsToAssign = [];
-        for (let i = 1; i <= 5; i++) {
-            const subVal = document.getElementById(`advSub${i}`).value;
-            const hourVal = parseInt(document.getElementById(`advHours${i}`).value) || 0;
-            if (subVal && hourVal > 0) {
-                if (hourVal % blockHours !== 0) {
-                    alert(`មុខវិជ្ជា ${subVal} មានចំនួន ${hourVal} ម៉ោង មិនអាចចែកជាប្លុក ${blockHours} ម៉ោងបានទេ!`);
+        // ប្រមូលទិន្នន័យពីគ្រប់ជួរ (Rows) ទាំងអស់
+        const rowElements = document.querySelectorAll('.sub-row');
+        let assignments = [];
+
+        for (let row of rowElements) {
+            const cName = row.querySelector('.row-class').value.trim();
+            const subVal = row.querySelector('.row-sub').value;
+            const hourVal = parseInt(row.querySelector('.row-hours').value) || 0;
+
+            if (cName || subVal || hourVal > 0) {
+                if (!cName || !subVal || hourVal <= 0) {
+                    alert("សូមបំពេញ ថ្នាក់ មុខវិជ្ជា និងចំនួនម៉ោងឱ្យបានគ្រប់គ្រាន់ក្នុងជួរនីមួយៗ!");
                     return;
                 }
-                subjectsToAssign.push({ sub: subVal, hours: hourVal });
+                if (hourVal % blockHours !== 0) {
+                    alert(`ថ្នាក់ ${cName} មុខវិជ្ជា ${subVal} មានចំនួន ${hourVal} ម៉ោង មិនអាចចែកជាប្លុក ${blockHours} ម៉ោងបានទេ!`);
+                    return;
+                }
+                assignments.push({ className: cName, sub: subVal, hours: hourVal });
             }
         }
 
-        if (subjectsToAssign.length === 0) {
-            alert("សូមជ្រើសរើសយ៉ាងហោចណាស់ ១ មុខវិជ្ជា និងបញ្ចូលចំនួនម៉ោង!");
+        if (assignments.length === 0) {
+            alert("សូមបញ្ចូលយ៉ាងហោចណាស់ ១ ជួរដែលមាន ថ្នាក់ មុខវិជ្ជា និងចំនួនម៉ោង!");
             return;
         }
 
         let assignedSummary = [];
 
-        for (let item of subjectsToAssign) {
+        // រត់ចែកម៉ោងតាមការកំណត់ក្នុងជួរនីមួយៗ
+        for (let item of assignments) {
+            const cName = item.className;
             const sub = item.sub;
             const hours = item.hours;
             const numberOfBlocks = hours / blockHours;
@@ -761,10 +700,10 @@
                         const block = group.slice(i, i + blockHours);
 
                         const teacherBusy = block.some(slot =>
-                            entries.some(e => e.name.toLowerCase() === name.toLowerCase() && e.day === day && e.time === slot)
+                            entries.some(e => e.name.toLowerCase() === name.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ")
                         );
-                        const classBusy = block.some(slot =>
-                            entries.some(e => e.className.toLowerCase() === cName.toLowerCase() && e.day === day && e.time === slot)
+                        const classBusy = sub === "ការិយាល័យ" ? false : block.some(slot =>
+                            entries.some(e => e.className.toLowerCase() === cName.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ")
                         );
 
                         if (!teacherBusy && !classBusy) {
@@ -775,7 +714,7 @@
             });
 
             if (availableBlocks.length < numberOfBlocks) {
-                alert(`⚠️ មិនមានម៉ោងទំនេរគ្រប់គ្រាន់សម្រាប់មុខវិជ្ជា ${sub} (${hours} ម៉ោង) ទេ!`);
+                alert(`⚠️ មិនមានម៉ោងទំនេរគ្រប់គ្រាន់សម្រាប់លោកគ្រូ/អ្នកគ្រូ ${name} បង្រៀនថ្នាក់ ${cName} មុខវិជ្ជា ${sub} (${hours} ម៉ោង) ទេ!`);
                 return;
             }
 
@@ -809,16 +748,53 @@
                 });
             });
 
-            assignedSummary.push(`${sub}: ${hours}ម៉ោង`);
+            assignedSummary.push(`ថ្នាក់ ${cName} - ${sub}: ${hours}ម៉ោង`);
         }
 
         localStorage.setItem('teacherTasks', JSON.stringify(entries));
         renderLists();
         renderAll();
         closeAdvancedModal();
-        alert(`✅ បានចែកកាលវិភាគស្វ័យប្រវត្តិដោយជោគជ័យសម្រាប់លោកគ្រូ/អ្នកគ្រូ ${name}!\n\nមុខវិជ្ជា៖ ${assignedSummary.join(', ')}`);
+        alert(`✅ បានចែកកាលវិភាគស្វ័យប្រវត្តិដោយជោគជ័យសម្រាប់លោកគ្រូ/អ្នកគ្រូ ${name}!\n\n${assignedSummary.join('\n')}`);
+    }
+        // មុខងារសម្រាប់បន្ថែមជួរថ្នាក់ និងមុខវិជ្ជាថ្មី
+    function addSubjectRow() {
+        const container = document.getElementById('subjectRowsContainer');
+        const newRow = document.createElement('div');
+        newRow.className = "sub-row";
+        newRow.style.cssText = "display: grid; grid-template-columns: 2fr 3fr 1.5fr auto; gap: 6px; align-items: center;";
+        newRow.innerHTML = `
+            <input type="text" class="row-class" placeholder="ថ្នាក់ (ឧ. ៩ខ)" style="font-size: 10.5px; padding: 4px;">
+            <select class="row-sub" style="font-size: 10.5px; padding: 4px;">
+                <option value="">-- ជ្រើសរើសមុខវិជ្ជា --</option>
+                <option value="ភាសាខ្មែរ(K)">ភាសាខ្មែរ(K)</option><option value="ពលរដ្ឋ(I)">ពលរដ្ឋ(I)</option>
+                <option value="ភូមិវិទ្យា(G)">ភូមិវិទ្យា(G)</option><option value="ប្រវត្តិវិទ្យា(H)">ប្រវត្តិវិទ្យា(H)</option>
+                <option value="គណិតវិទ្យា(M)">គណិតវិទ្យា(M)</option><option value="រូបវិទ្យា(P)">រូបវិទ្យា(P)</option>
+                <option value="គីមីវិទ្យា(C)">គីមីវិទ្យា(C)</option><option value="ជីវវិទ្យា(B)">ជីវវិទ្យា(B)</option>
+                <option value="ផែនដីវិទ្យា(Es)">ផែនដីវិទ្យា(Es)</option><option value="អង់គ្លេស(E)">អង់គ្លេស(E)</option>
+                <option value="បារាំង(FR)">បារាំង(FR)</option><option value="គេហះ(He)">គេហះ(He)</option>
+                <option value="បច្ចេកវិជ្ជា(ICT)">បច្ចេកវិជ្ជា(ICT)</option><option value="អប់រំសិល្បៈ(Art)">អប់រំសិល្បៈ(Art)</option>
+                <option value="កីឡា(Ed)">កីឡា(Ed)</option><option value="អប់រំកាយ(PE)">អប់រំកាយ(PE)</option>
+                <option value="បំណិន(LS)">បំណិន(LS)</option><option value="រោងជាង(WS)">រោងជាង(WS)</option>
+                <option value="កសិកម្ម(Ag)">កសិកម្ម(Ag)</option><option value="សេដ្ឋកិច្ច(ECO)">សេដ្ឋកិច្ច(ECO)</option>
+                <option value="សុខភាព(Hed)">សុខភាព(Hed)</option><option value="ជំនាញវិជ្ជាជីវៈ(VS)">ជំនាញវិជ្ជាជីវៈ(VS)</option>
+                <option value="ICT">ICT</option><option value="ការិយាល័យ">ការិយាល័យ</option>
+            </select>
+            <input type="number" class="row-hours" min="1" placeholder="ចំនួនម៉ោង" style="font-size: 10.5px; padding: 4px;">
+            <button type="button" onclick="removeSubjectRow(this)" style="background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px;">✕</button>
+        `;
+        container.appendChild(newRow);
     }
 
+    // មុខងារលុបជួរចេញវិញ
+    function removeSubjectRow(btn) {
+        const rows = document.querySelectorAll('.sub-row');
+        if (rows.length > 1) {
+            btn.closest('.sub-row').remove();
+        } else {
+            alert("ត្រូវមានយ៉ាងហោចណាស់ ១ ជួរ!");
+        }
+    }
     function autoDivideHours() {
         const currentSchool = document.getElementById('schoolName').value;
         if (!currentSchool) {
