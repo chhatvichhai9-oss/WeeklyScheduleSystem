@@ -412,7 +412,7 @@
         <input type="text" id="advRole" placeholder="ឧ. គ្រូបង្រៀន" style="width: 100%; margin-top: 3px;">
     </div>
     <div>
-        <label style="font-weight: bold; font-size: 11px; color: #c0392b;">ថ្នាក់បន្ទុក (បើមាន)៖</label>
+        <label style="font-weight: bold; font-size: 11px; color: #c0392b;">ជាគ្រូថ្នាក់បន្ទុក (បើមាន)៖</label>
         <input type="text" id="advHomeroomClass" placeholder="ឧ. ៩ក (បើគ្មានទុកទទេ)" style="width: 100%; margin-top: 3px; border: 1px solid #c0392b;">
     </div>
 </div>
@@ -638,7 +638,7 @@
         const gender = document.getElementById('advGender').value;
         const phone = document.getElementById('advPhone').value.trim();
         const baseRole = document.getElementById('advRole').value.trim() || "គ្រូបង្រៀន";
-        const homeroomClass = document.getElementById('advHomeroomClass').value.trim(); // ថ្នាក់បន្ទុក
+        const homeroomClass = document.getElementById('advHomeroomClass') ? document.getElementById('advHomeroomClass').value.trim() : "";
         const blockHours = parseInt(document.getElementById('advBlockHours').value) || 1;
         const session = document.getElementById('advTimeSession').value;
 
@@ -656,7 +656,6 @@
         if (!name) { alert("សូមបញ្ចូលឈ្មោះគ្រូ!"); return; }
         if (selectedDays.length === 0) { alert("សូមជ្រើសរើសយ៉ាងហោចណាស់ ១ ថ្ងៃ!"); return; }
 
-        // ប្រមូលទិន្នន័យពីគ្រប់ជួរ (Rows) ទាំងអស់
         const rowElements = document.querySelectorAll('.sub-row');
         let assignments = [];
 
@@ -670,10 +669,6 @@
                     alert("សូមបំពេញ ថ្នាក់ មុខវិជ្ជា និងចំនួនម៉ោងឱ្យបានគ្រប់គ្រាន់ក្នុងជួរនីមួយៗ!");
                     return;
                 }
-                if (hourVal % blockHours !== 0) {
-                    alert(`ថ្នាក់ ${cName} មុខវិជ្ជា ${subVal} មានចំនួន ${hourVal} ម៉ោង មិនអាចចែកជាប្លុក ${blockHours} ម៉ោងបានទេ!`);
-                    return;
-                }
                 assignments.push({ className: cName, sub: subVal, hours: hourVal });
             }
         }
@@ -685,65 +680,117 @@
 
         let assignedSummary = [];
 
-        // រត់ចែកម៉ោងតាមការកំណត់ក្នុងជួរនីមួយៗ
         for (let item of assignments) {
             const cName = item.className;
             const sub = item.sub;
             const hours = item.hours;
-            const numberOfBlocks = hours / blockHours;
-            const availableBlocks = [];
 
-            // កំណត់តួនាទីស្វ័យប្រវត្តិ៖ បើថ្នាក់ត្រូវគ្នានឹងថ្នាក់បន្ទុក ដាក់ "គ្រូបន្ទុកថ្នាក់" បើមិនត្រូវទេ ដាក់តួនាទីធម្មតា
+            let targetBlocks = [];
+            if (blockHours === 2) {
+                let rem = hours;
+                while (rem >= 2) {
+                    targetBlocks.push(2);
+                    rem -= 2;
+                }
+                if (rem === 1) {
+                    targetBlocks.push(1);
+                }
+            } else {
+                for (let i = 0; i < hours; i++) targetBlocks.push(1);
+            }
+
             let assignedRole = baseRole;
             if (homeroomClass && homeroomClass.toLowerCase() === cName.toLowerCase()) {
                 assignedRole = "គ្រូបន្ទុកថ្នាក់";
             }
 
-            selectedDays.forEach(day => {
-                let groups = [];
-                if (session === 'morning') groups = [customMorning];
-                else if (session === 'afternoon') groups = [customAfternoon];
-                else groups = [customMorning, customAfternoon];
+            let chosenBlocks = [];
+            
+            // រៀបចំ groups ឱ្យពេលព្រឹកនៅមុនពេលល្ងាច (Prioritize Morning first)
+            let sessionGroups = [];
+            if (session === 'morning') sessionGroups = [customMorning];
+            else if (session === 'afternoon') sessionGroups = [customAfternoon];
+            else sessionGroups = [customMorning, customAfternoon]; // ព្រឹកមុន ល្ងាចក្រោយ
 
-                groups.forEach(group => {
-                    if(group.length === 0) return;
-                    for (let i = 0; i <= group.length - blockHours; i++) {
-                        const block = group.slice(i, i + blockHours);
+            for (let bSize of targetBlocks) {
+                let foundBlock = null;
 
-                        const teacherBusy = block.some(slot =>
-                            entries.some(e => e.name.toLowerCase() === name.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ")
-                        );
-                        const classBusy = sub === "ការិយាល័យ" ? false : block.some(slot =>
-                            entries.some(e => e.className.toLowerCase() === cName.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ")
-                        );
-
-                        if (!teacherBusy && !classBusy) {
-                            availableBlocks.push({ day: day, slots: block });
-                        }
-                    }
+                // 🔄 រៀបចំថ្ងៃស្វែងរក៖ ព្យាយាមចែកចាយមុខវិជ្ជាដូចគ្នាទៅថ្ងៃផ្សេងគ្នា (ជៀសវាងដាក់ថ្ងៃជាមួយគ្នាពេកបើមានថ្ងៃសល់)
+                let shuffledDays = [...selectedDays];
+                // តម្រៀបថ្ងៃណាដែលទើបតែត្រូវបានជ្រើសរើសតិចជាងគេ ឱ្យទៅមុខគេ
+                shuffledDays.sort((d1, d2) => {
+                    let count1 = chosenBlocks.filter(cb => cb.day === d1).length;
+                    let count2 = chosenBlocks.filter(cb => cb.day === d2).length;
+                    return count1 - count2;
                 });
-            });
 
-            if (availableBlocks.length < numberOfBlocks) {
-                alert(`⚠️ មិនមានម៉ោងទំនេរគ្រប់គ្រាន់សម្រាប់លោកគ្រូ/អ្នកគ្រូ ${name} បង្រៀនថ្នាក់ ${cName} មុខវិជ្ជា ${sub} (${hours} ម៉ោង) ទេ!`);
-                return;
-            }
+                for (let day of shuffledDays) {
+                    for (let group of sessionGroups) {
+                        if (group.length === 0) continue;
+                        for (let i = 0; i <= group.length - bSize; i++) {
+                            const block = group.slice(i, i + bSize);
 
-            let selectedBlocks = [];
-            selectedDays.forEach(day => {
-                if (selectedBlocks.length < numberOfBlocks) {
-                    const dayMatch = availableBlocks.find(b => b.day === day && !selectedBlocks.includes(b));
-                    if (dayMatch) selectedBlocks.push(dayMatch);
+                            const alreadySelectedInDay = chosenBlocks.some(cb => cb.day === day && cb.slots.some(s => block.includes(s)));
+                            
+                            // 🛑 ហាមឃាត់មិនឱ្យមុខវិជ្ជាដូចគ្នាចែកក្នុងថ្ងៃជាមួយគ្នា បើសិនជាអាចរកថ្ងៃផ្សេងបាន
+                            const sameSubInSameDay = chosenBlocks.some(cb => cb.day === day);
+                            if (sameSubInSameDay && selectedDays.length > chosenBlocks.length) {
+                                continue; 
+                            }
+
+                            const teacherBusy = block.some(slot =>
+                                entries.some(e => e.name.toLowerCase() === name.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ")
+                            );
+                            const classBusy = sub === "ការិយាល័យ" ? false : block.some(slot =>
+                                entries.some(e => e.className.toLowerCase() === cName.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ")
+                            );
+
+                            if (!alreadySelectedInDay && !teacherBusy && !classBusy) {
+                                foundBlock = { day: day, slots: block };
+                                break;
+                            }
+                        }
+                        if (foundBlock) break;
+                    }
+                    if (foundBlock) break;
                 }
-            });
 
-            while (selectedBlocks.length < numberOfBlocks && availableBlocks.length > selectedBlocks.length) {
-                const nextBlock = availableBlocks.find(b => !selectedBlocks.includes(b));
-                if (nextBlock) selectedBlocks.push(nextBlock);
-                else break;
+                // បើរកមិនបានដោយសារតថ្ងៃ យោងដកបន្ធូរការហាមឃាត់ថ្ងៃដដែល
+                if (!foundBlock) {
+                    for (let day of shuffledDays) {
+                        for (let group of sessionGroups) {
+                            if (group.length === 0) continue;
+                            for (let i = 0; i <= group.length - bSize; i++) {
+                                const block = group.slice(i, i + bSize);
+                                const alreadySelectedInDay = chosenBlocks.some(cb => cb.day === day && cb.slots.some(s => block.includes(s)));
+
+                                const teacherBusy = block.some(slot =>
+                                    entries.some(e => e.name.toLowerCase() === name.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ")
+                                );
+                                const classBusy = sub === "ការិយាល័យ" ? false : block.some(slot =>
+                                    entries.some(e => e.className.toLowerCase() === cName.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ")
+                                );
+
+                                if (!alreadySelectedInDay && !teacherBusy && !classBusy) {
+                                    foundBlock = { day: day, slots: block };
+                                    break;
+                                }
+                            }
+                            if (foundBlock) break;
+                        }
+                        if (foundBlock) break;
+                    }
+                }
+
+                if (foundBlock) {
+                    chosenBlocks.push(foundBlock);
+                } else {
+                    alert(`⚠️ មិនមានម៉ោងទំនេរគ្រប់គ្រាន់សម្រាប់លោកគ្រូ/អ្នកគ្រូ ${name} បង្រៀនថ្នាក់ ${cName} មុខវិជ្ជា ${sub} (${hours} ម៉ោង) ទេ!`);
+                    return;
+                }
             }
 
-            selectedBlocks.forEach(block => {
+            chosenBlocks.forEach(block => {
                 block.slots.forEach((slot, index) => {
                     entries.push({
                         id: Date.now() + Math.random() + index,
@@ -759,7 +806,7 @@
                 });
             });
 
-            assignedSummary.push(`ថ្នាក់ ${cName} - ${sub}: ${hours}ម៉ោង (តួនាទី៖ ${assignedRole})`);
+            assignedSummary.push(`ថ្នាក់ ${cName} - ${sub}: ${hours} ម៉ោង (${targetBlocks.join('+')} ម៉ោង)`);
         }
 
         localStorage.setItem('teacherTasks', JSON.stringify(entries));
@@ -827,54 +874,96 @@
         if (!cName) { alert("សូមបញ្ចូលថ្នាក់ជាមុនសិន!"); document.getElementById('classInput').focus(); return; }
         if (!hours || hours < 1) { alert("សូមបញ្ចូលចំនួនម៉ោងយ៉ាងតិច 1 ម៉ោង!"); document.getElementById('hoursInput').focus(); return; }
 
-        if (hours % blockHours !== 0) {
-            alert("⚠️ ចំនួនម៉ោង " + hours + " ម៉ោង មិនអាចចែកជា " + blockHours + " ម៉ោងជាប់គ្នាបានទេ!");
-            return;
+        // គណនាទំហំប្លុកម៉ោង (ឧ. ៧ ម៉ោង -> [2, 2, 2, 1])
+        let targetBlocks = [];
+        if (blockHours === 2) {
+            let rem = hours;
+            while (rem >= 2) {
+                targetBlocks.push(2);
+                rem -= 2;
+            }
+            if (rem === 1) {
+                targetBlocks.push(1);
+            }
+        } else {
+            for (let i = 0; i < hours; i++) targetBlocks.push(1);
         }
 
-        const numberOfBlocks = hours / blockHours;
-        const availableBlocks = [];
+        let chosenBlocks = [];
+        // រៀបចំពេលព្រឹកមុនពេលល្ងាច
+        const sessionGroups = [morningSlots, afternoonSlots];
 
-        days.forEach(day => {
-            const groups = [morningSlots, afternoonSlots];
-            groups.forEach(group => {
-                for (let i = 0; i <= group.length - blockHours; i++) {
-                    const block = group.slice(i, i + blockHours);
-                    const teacherBusy = block.some(slot => entries.some(e => e.name.toLowerCase() === name.toLowerCase() && e.day === day && e.time === slot));
-                    const classBusy = block.some(slot => entries.some(e => e.className.toLowerCase() === cName.toLowerCase() && e.day === day && e.time === slot));
+        for (let bSize of targetBlocks) {
+            let foundBlock = null;
 
-                    if (!teacherBusy && !classBusy) {
-                        availableBlocks.push({ day: day, slots: block });
-                    }
-                }
+            // តម្រៀបថ្ងៃ ដើម្បីចែកចាយទៅថ្ងៃផ្សេងគ្នា (ថ្ងៃណាទើបដាក់តិចជាងគេ ឱ្យទៅមុន)
+            let shuffledDays = [...days];
+            shuffledDays.sort((d1, d2) => {
+                let count1 = chosenBlocks.filter(cb => cb.day === d1).length;
+                let count2 = chosenBlocks.filter(cb => cb.day === d2).length;
+                return count1 - count2;
             });
-        });
 
-        if (availableBlocks.length < numberOfBlocks) {
-            alert("⚠️ មិនអាចចែកបាន " + hours + " ម៉ោងទេ! មានប្លុកទំនេរតែ " + availableBlocks.length + " ប៉ុណ្ណោះ។");
-            return;
-        }
+            // ព្យាយាមស្វែងរកថ្ងៃផ្សេងគ្នាជាមុនសិន (មិនឱ្យជាន់ថ្ងៃគ្នាពេក)
+            for (let day of shuffledDays) {
+                for (let group of sessionGroups) {
+                    if (group.length === 0) continue;
+                    for (let i = 0; i <= group.length - bSize; i++) {
+                        const block = group.slice(i, i + bSize);
 
-        let selectedBlocks = [];
-        for (const day of days) {
-            if (selectedBlocks.length >= numberOfBlocks) break;
-            const dayM = availableBlocks.find(b => b.day === day && morningSlots.includes(b.slots[0]));
-            if (dayM) selectedBlocks.push(dayM);
-        }
-        if (selectedBlocks.length < numberOfBlocks) {
-            for (const day of days) {
-                if (selectedBlocks.length >= numberOfBlocks) break;
-                const dayA = availableBlocks.find(b => b.day === day && afternoonSlots.includes(b.slots[0]));
-                if (dayA && !selectedBlocks.includes(dayA)) selectedBlocks.push(dayA);
+                        const alreadySelectedInDay = chosenBlocks.some(cb => cb.day === day && cb.slots.some(s => block.includes(s)));
+                        const sameSubInSameDay = chosenBlocks.some(cb => cb.day === day);
+                        
+                        // ព្យាយាមកុំឱ្យដាក់ថ្ងៃដដែល បើសិនជា yacht ថ្ងៃផ្សេងទៀតទំនេរ
+                        if (sameSubInSameDay && days.length > chosenBlocks.length) {
+                            continue;
+                        }
+
+                        const teacherBusy = block.some(slot => entries.some(e => e.name.toLowerCase() === name.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ"));
+                        const classBusy = sub === "ការិយាល័យ" ? false : block.some(slot => entries.some(e => e.className.toLowerCase() === cName.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ"));
+
+                        if (!alreadySelectedInDay && !teacherBusy && !classBusy) {
+                            foundBlock = { day: day, slots: block };
+                            break;
+                        }
+                    }
+                    if (foundBlock) break;
+                }
+                if (foundBlock) break;
+            }
+
+            // បើរកមិនបានដោយសារថ្ងៃ យោងដកបន្ធូរការហាមឃាត់ថ្ងៃដដែល
+            if (!foundBlock) {
+                for (let day of shuffledDays) {
+                    for (let group of sessionGroups) {
+                        if (group.length === 0) continue;
+                        for (let i = 0; i <= group.length - bSize; i++) {
+                            const block = group.slice(i, i + bSize);
+                            const alreadySelectedInDay = chosenBlocks.some(cb => cb.day === day && cb.slots.some(s => block.includes(s)));
+
+                            const teacherBusy = block.some(slot => entries.some(e => e.name.toLowerCase() === name.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ"));
+                            const classBusy = sub === "ការិយាល័យ" ? false : block.some(slot => entries.some(e => e.className.toLowerCase() === cName.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ"));
+
+                            if (!alreadySelectedInDay && !teacherBusy && !classBusy) {
+                                foundBlock = { day: day, slots: block };
+                                break;
+                            }
+                        }
+                        if (foundBlock) break;
+                    }
+                    if (foundBlock) break;
+                }
+            }
+
+            if (foundBlock) {
+                chosenBlocks.push(foundBlock);
+            } else {
+                alert("⚠️ មិនអាចចែកបាន " + hours + " ម៉ោងទេ! គ្មានម៉ោងទំនេរគ្រប់គ្រាន់ឡើយ។");
+                return;
             }
         }
-        while (selectedBlocks.length < numberOfBlocks && availableBlocks.length > selectedBlocks.length) {
-            const rem = availableBlocks.find(b => !selectedBlocks.includes(b));
-            if (rem) selectedBlocks.push(rem);
-            else break;
-        }
 
-        selectedBlocks.forEach(block => {
+        chosenBlocks.forEach(block => {
             block.slots.forEach((slot, index) => {
                 entries.push({
                     id: Date.now() + Math.random() + index,
@@ -887,7 +976,7 @@
         localStorage.setItem('teacherTasks', JSON.stringify(entries));
         renderLists();
         renderAll();
-        alert("✅ ចែកម៉ោងស្វ័យប្រវត្តិបានជោគជ័យ!");
+        alert("✅ ចែកម៉ោងស្វ័យប្រវត្តិបានជោគជ័យ! (" + targetBlocks.join("+") + " ម៉ោង)");
         document.getElementById('hoursInput').value = "";
     }
 
