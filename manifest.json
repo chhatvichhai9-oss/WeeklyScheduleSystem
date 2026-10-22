@@ -1,0 +1,15 @@
+{
+  "name": "School Login System",
+  "short_name": "School App",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#bfe3f8",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "moeys-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
