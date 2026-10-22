@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
+    <script>
+    // ពិនិត្យមើលថាតើបានឆ្លងកាត់ការ Login ស្មោះស្ម័គ្រហើយឬនៅ
+    const isLoggedIn = localStorage.getItem("isLoggedIn") || sessionStorage.getItem("currentUser");
+    
+    // បើសិនជាគ្មានទិន្នន័យបញ្ជាក់ថាបាន Login ទេ វានឹងច្រានចោលទៅទំព័រ login វិញ
+    if (!isLoggedIn) {
+        alert("⚠️ សូមមេត្តាចូលប្រព័ន្ធដោយប្រើប្រាស់ឈ្មោះ និងពាក្យសម្ងាត់ជាមុនសិន!");
+        window.location.href = "index.html";
+    }
+</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Moul&family=Kantumruy+Pro:wght@400;700&display=swap" rel="stylesheet">
