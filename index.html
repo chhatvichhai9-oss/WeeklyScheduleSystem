@@ -110,7 +110,7 @@
 
     <form id="loginForm">
       <div class="input-group">
-        <label for="email">អ៊ីមែល (Email)</label>
+        <label for="email">អ៊ីមែលសាលា (Email)</label>
         <input type="email" id="email" required placeholder="👤 example@school.edu">
       </div>
       <div class="input-group">
@@ -195,6 +195,8 @@
         messageDiv.innerText = "ចូលប្រព័ន្ធជោគជ័យ! កំពុងចូលទៅកាន់ប្រព័ន្ធ...";
         
         sessionStorage.setItem("currentUser", user.email);
+        // ➕ បន្ថែមបន្ទាត់នេះ ដើម្បីកំណត់សិទ្ធិឱ្យទំព័រ app.html ស្គាល់ថាបាន Login រួច
+        localStorage.setItem("isLoggedIn", "true");
 
         setTimeout(() => {
           window.location.href = "app.html";
