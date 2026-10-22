@@ -7,9 +7,10 @@
   "theme_color": "#2563eb",
   "icons": [
     {
-      "src": "moeys-logo.png",
+      "src": "./moeys-logo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
