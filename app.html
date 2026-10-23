@@ -274,6 +274,14 @@
                     <!-- 🚪 ប៊ូតុងចាកចេញដាក់នៅខាងក្រៅនេះវិញ -->
                     <button type="button" class="btn-clear" style="background-color: #d30a0a; font-size: 10px; padding: 3px 6px;" onclick="logoutUser()">🚪ចាកចេញ (Log Out)</button>
                     <div class="school-input-group"></div>
+                    <!-- 🟢 កូដបន្ថែមសម្រាប់ជ្រើសរើស និងបង្ហាញកាលវិភាគគ្រូដាច់ដោយឡែក -->
+                    <div style="display: flex; gap: 5px; align-items: center; background: #fdfefe; padding: 4px; border-radius: 4px; border: 1px solid #1a5276; margin: 3px 0;">
+                        <span style="font-size: 10.5px; font-weight: bold; color: #1a5276;">👨‍🏫 កាលវិភាគបុគ្គលិក/គ្រូ៖</span>
+                        <select id="teacherSelectDropdown" style="font-size: 10.5px; padding: 3px; border: 1px solid #1a5276; border-radius: 3px; min-width: 140px;">
+                            <option value="">-- ជ្រើសរើសឈ្មោះ ឬលេខរៀងគ្រូ --</option>
+                        </select>
+                        <button type="button" class="btn-print" style="background-color: #2980b9; font-size: 10.5px; padding: 3px 8px;" onclick="openTeacherScheduleModal()">🔍 មើលកាលវិភាគគ្រូ</button>
+                    </div>
                 </select>
             </div>
         </div>
@@ -541,7 +549,18 @@
         </div>
     </div>
 </div>
-
+<!-- 🟢 Modal សម្រាប់បង្ហាញកាលវិភាគគ្រូជាបុគ្គល -->
+<div id="teacherScheduleModal" class="modal">
+    <div class="modal-content" style="max-width: 1000px;">
+        <span class="close-btn" onclick="closeTeacherScheduleModal()">&times;</span>
+        <div id="teacherSchedulePrintArea">
+            <!-- មាតិកាកាលវិភាគគ្រូនឹងត្រូវទាញមកបង្ហាញទីនេះស្វ័យប្រវត្តិ -->
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button type="button" class="btn-print" onclick="printTeacherSchedule()">🖨️ បោះពុម្ពកាលវិភាគគ្រូ</button>
+        </div>
+    </div>
+</div>
 <script>
     let entries = JSON.parse(localStorage.getItem('teacherTasks')) || [];
     const baseMorningSlots = ["07:00 - 08:00", "08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:00",];
@@ -1045,6 +1064,7 @@
         renderMasterSchedule(); 
         renderMatrix(); 
         renderAttendanceTable();
+        updateTeacherDropdown(); // 🟢 បន្ថែមបន្ទាត់នេះដើម្បីឱ្យឈ្មោះគ្រូអាប់ដេតស្វ័យប្រវត្តិ
     }
 
     function renderLists() {
@@ -1638,6 +1658,116 @@ window.onload = function() {
             window.location.href = "index.html";
         }
     }
+    // 🟢 បំពេញបញ្ជីឈ្មោះគ្រូក្នុង Dropdown ពេលទំព័រ ਲੋដរួច
+function updateTeacherDropdown() {
+    const dropdown = document.getElementById('teacherSelectDropdown');
+    if (!dropdown) return;
+    
+    // ទាញយកឈ្មោះគ្រូដែលមិនស្ទួនគ្នា
+    const uniqueTeacherNames = [...new Set(entries.map(e => e.name).filter(Boolean))].sort();
+    
+    let html = '<option value="">-- ជ្រើសរើសឈ្មោះ ឬលេខរៀងគ្រូ --</option>';
+    uniqueTeacherNames.forEach((tName, index) => {
+        html += `<option value="${tName}">${index + 1}. ${tName}</option>`;
+    });
+    dropdown.innerHTML = html;
+}
+
+// បើក Modal កាលវិភាគគ្រូ
+function openTeacherScheduleModal() {
+    const tName = document.getElementById('teacherSelectDropdown').value;
+    if (!tName) {
+        alert("សូមមេត្តាជ្រើសរើសឈ្មោះ ឬលេខរៀងលោកគ្រូ/អ្នកគ្រូជាមុនសិន!");
+        return;
+    }
+
+    const modal = document.getElementById('teacherScheduleModal');
+    const container = document.getElementById('teacherSchedulePrintArea');
+    
+    const schName = document.getElementById('schoolName').value || "............................";
+    const sYear = document.getElementById('schoolYear').value ? ` ឆ្នាំសិក្សា ${document.getElementById('schoolYear').value}` : "";
+    const chan = document.getElementById('chanDate').value || "";
+    const soriya = document.getElementById('soriyaDate').value || "";
+    const dirName = document.getElementById('directorName').value || "............................";
+    
+    // ត្រងយកម៉ោងបង្រៀនរបស់គ្រូសាមី
+    const teacherEntries = entries.filter(e => e.name === tName);
+    const tGender = teacherEntries.length > 0 ? teacherEntries[0].gender : "";
+    const tPhone = teacherEntries.length > 0 ? teacherEntries[0].phone : "";
+    const tRole = teacherEntries.length > 0 ? teacherEntries[0].role : "គ្រូបង្រៀន";
+
+    let html = `
+        <div class="header-top">
+            <div class="school-side"><div style="font-family:'Khmer OS Muol Light'; font-size:12px; color:var(--main-color)">${schName}</div></div>
+            <div class="nation-side">
+                <div class="nation-title" style="font-size:11px;">ព្រះរាជាណាចក្រកម្ពុជា</div>
+                <div class="nation-motto" style="font-size:9px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
+            </div>
+        </div>
+        <div class="class-title" style="font-size:14px; margin-top:10px;">កាលវិភាគបង្រៀនផ្ទាល់ខ្លួនរបស់៖ ${tName} (${tGender}) ${sYear}</div>
+        <div style="font-size: 11px; margin-bottom: 8px; text-align: center;">តួនាទី៖ <b>${tRole}</b> | លេខទូរស័ព្ទ៖ <b>${tPhone || "---"}</b> | សរុបម៉ោងបង្រៀន៖ <span style="color:red; font-weight:bold;">${teacherEntries.length} ម៉ោង</span></div>
+        
+        <table class="matrix-table">
+            <thead>
+                <tr>
+                    <th style="width:90px;">ម៉ោង</th>`;
+    daysKh.forEach(d => html += `<th>${d}</th>`);
+    html += `</tr></thead><tbody>`;
+
+    // ពេលព្រឹក
+    morningSlots.forEach(slot => {
+        html += `<tr><td style="font-weight:bold; background:#f9f9f9;">${slot}</td>`;
+        days.forEach(day => {
+            const match = teacherEntries.find(e => e.day === day && e.time === slot);
+            html += `<td>${match ? `<div style="line-height:1.1"><strong>ថ្នាក់៖ ${match.className}</strong><br><span style="color:var(--main-color);font-style:italic;font-size:10px">${match.sub}</span></div>` : '-'}</td>`;
+        });
+        html += `</tr>`;
+    });
+
+    html += `<tr><td class="afternoon-break">11:00 - 13:00</td><td colspan="6" class="afternoon-break">សម្រាក / ពេលរសៀល</td></tr>`;
+
+    // ពេលល្ងាច
+    afternoonSlots.forEach(slot => {
+        html += `<tr><td style="font-weight:bold; background:#f9f9f9;">${slot}</td>`;
+        days.forEach(day => {
+            const match = teacherEntries.find(e => e.day === day && e.time === slot);
+            html += `<td>${match ? `<div style="line-height:1.1"><strong>ថ្នាក់៖ ${match.className}</strong><br><span style="color:var(--main-color);font-style:italic;font-size:10px">${match.sub}</span></div>` : '-'}</td>`;
+        });
+        html += `</tr>`;
+    });
+
+    html += `</tbody></table>`;
+
+    // ផ្នែកហត្ថលេខា
+    html += `
+        <div class="signature-section" style="margin-top: 20px;">
+            <div class="sig-box">
+                <div class="sig-title">បានឃើញ និងឯកភាព<br>នាយកសាលា</div>
+                <div class="sig-name">${dirName}</div>
+            </div>
+            <div class="sig-box">
+                <div class="sig-date-area">${chan}<br>${soriya}</div>
+                <div class="sig-title">ហត្ថលេខា និងឈ្មោះគ្រូសាមីខ្លួន</div>
+                <div class="sig-name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${tName}</div>
+            </div>
+        </div>`;
+
+    container.innerHTML = html;
+    modal.style.display = "block";
+}
+
+function closeTeacherScheduleModal() {
+    document.getElementById('teacherScheduleModal').style.display = "none";
+}
+
+function printTeacherSchedule() {
+    const printContent = document.getElementById('teacherSchedulePrintArea').innerHTML;
+    const originalBody = document.body.innerHTML;
+    document.body.innerHTML = printContent;
+    window.print();
+    document.body.innerHTML = originalBody;
+    location.reload(); // Re-load វិញដើម្បីឱ្យ Scripts ដំណើរការធម្មតា
+}
 </script>
     <!-- កូដ Heartbeat សម្រាប់រក្សាសិទ្ធិ Single Device -->
   <script type="module">
