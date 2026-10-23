@@ -278,7 +278,13 @@
                 </select>
             </div>
         </div>
-        
+        <!-- ✏️ កូដថ្មីដែលត្រូវផ្លាស់ប្តូរជំនួស -->
+            <div class="color-picker-section" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 5px 15px;">
+                <!-- ប្រអប់បំពេញឆ្នាំសិក្សាដាក់ពីមុខ -->
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <label style="font-weight: bold; font-size: 11px; color: #1a5276; white-space: nowrap;">📅 ឆ្នាំសិក្សា៖</label>
+                    <input type="text" id="schoolYear" placeholder="ឧ. ២០២៥ - ២០២៦" oninput="saveMetaData()" style="width: 110px; font-size: 11px; border: 1px solid #1a5276; padding: 3px 6px; border-radius: 4px;">
+                </div>
         <div class="color-picker-section">
             <h2>ប្រព័ន្ធគ្រប់គ្រងកាលវិភាគសិក្សា</h2>
             <span class="color-label">ពណ៌ប្រធានបទ៖</span>
@@ -570,6 +576,7 @@
     window.onload = function() {
         initColors();
         document.getElementById('schoolName').value = localStorage.getItem('schoolName') || "";
+        document.getElementById('schoolYear').value = localStorage.getItem('schoolYear') || ""; // 👈 បន្ថែមបន្ទាត់នេះ
         document.getElementById('chanDate').value = localStorage.getItem('chanDate') || "";
         document.getElementById('soriyaDate').value = localStorage.getItem('soriyaDate') || "";
         document.getElementById('directorName').value = localStorage.getItem('directorName') || "";
@@ -601,6 +608,7 @@
     function saveMetaData() {
         const sch = document.getElementById('schoolName').value;
         localStorage.setItem('schoolName', sch);
+        localStorage.setItem('schoolYear', document.getElementById('schoolYear').value); // 👈 បន្ថែមបន្ទាត់នេះ
         localStorage.setItem('chanDate', document.getElementById('chanDate').value);
         localStorage.setItem('soriyaDate', document.getElementById('soriyaDate').value);
         localStorage.setItem('directorName', document.getElementById('directorName').value);
@@ -1056,28 +1064,31 @@
     }
 
     function renderMasterSchedule() {
-        const outer = document.getElementById('master-schedule-outer');
-        const schName = document.getElementById('schoolName').value;
-        // ត្រងយកតែគ្រូ និងមិនមែនមុខវិជ្ជា "ការិយាល័យ"
-        const filteredEntries = entries.filter(e => (e.role.includes("គ្រូ") || e.role === "") && e.sub !== "ការិយាល័យ"); 
-        const uniqueClasses = [...new Set(entries.map(e => e.className))].sort();
-        
-        const teacherNumberMap = {};
-        const uniqueTeacherNames = [...new Set(entries.map(e => e.name).filter(Boolean))];
-        uniqueTeacherNames.forEach((teacherName, index) => { teacherNumberMap[teacherName] = index + 1; });
+    const outer = document.getElementById('master-schedule-outer');
+    const schName = document.getElementById('schoolName').value;
+    // 🟢 បន្ថែមបន្ទាត់ទាញយកតម្លៃឆ្នាំសិក្សានៅត្រង់នេះ
+    const sYear = document.getElementById('schoolYear').value ? ` ឆ្នាំសិក្សា ${document.getElementById('schoolYear').value}` : "";
+    
+    const filteredEntries = entries.filter(e => (e.role.includes("គ្រូ") || e.role === "") && e.sub !== "ការិយាល័យ"); 
+    const uniqueClasses = [...new Set(entries.map(e => e.className))].sort();
+    
+    const teacherNumberMap = {};
+    const uniqueTeacherNames = [...new Set(entries.map(e => e.name).filter(Boolean))];
+    uniqueTeacherNames.forEach((teacherName, index) => { teacherNumberMap[teacherName] = index + 1; });
 
-        if (uniqueClasses.length === 0) { outer.innerHTML = ""; return; }
+    if (uniqueClasses.length === 0) { outer.innerHTML = ""; return; }
 
-        let html = `<div class="master-container">
-            <div class="header-top">
-                <div class="school-side"><div style="font-family:'Khmer OS Muol Light'; font-size:11px;">${schName}</div></div>
-                <div class="nation-side">
-                    <div class="nation-title" style="font-size:11px;">ព្រះរាជាណាចក្រកម្ពុជា</div>
-                    <div class="nation-motto" style="font-size:9px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
-                </div>
+    let html = `<div class="master-container">
+        <div class="header-top">
+            <div class="school-side"><div style="font-family:'Khmer OS Muol Light'; font-size:11px;">${schName}</div></div>
+            <div class="nation-side">
+                <div class="nation-title" style="font-size:11px;">ព្រះរាជាណាចក្រកម្ពុជា</div>
+                <div class="nation-motto" style="font-size:9px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
             </div>
-            <div class="master-title" style="margin-bottom:10px;">កាលវិភាគរួមគ្រប់ថ្នាក់ (Master Schedule)</div>
-            <table class="master-table">
+        </div>
+        <!-- 🟢 កន្លែងដែលបានកែសម្រួលបញ្ចូល ${sYear} -->
+        <div class="master-title" style="margin-bottom:10px;">កាលវិភាគរួមគ្រប់ថ្នាក់ (Master Schedule)${sYear}</div>
+        <table class="master-table">
                 <thead>
                     <tr style="background:#34495e; color:white;">
                         <th style="width:30px;">ថ្នាក់</th>
@@ -1345,11 +1356,17 @@
         const soriya = document.getElementById('soriyaDate').value;
         const dirName = document.getElementById('directorName').value;
         const schName = document.getElementById('schoolName').value;
+        
+        // 🟢 បន្ថែមបន្ទាត់ទាញយកតម្លៃឆ្នាំសិក្សានៅត្រង់នេះ
+        const sYear = document.getElementById('schoolYear').value ? ` ឆ្នាំសិក្សា ${document.getElementById('schoolYear').value}` : "";
 
         uniqueClasses.forEach(cName => {
             const classEntries = filteredEntries.filter(e => e.className === cName);
             const classDiv = document.createElement('div'); classDiv.className = "class-group";
-            let html = `<div class="header-top"><div class="school-side"><div style="font-family:'Khmer OS Muol Light'; font-size:13px; color:var(--main-color)">${schName}</div></div><div class="nation-side"><div class="nation-title">ព្រះរាជាណាចក្រកម្ពុជា</div><div class="nation-motto">ជាតិ សាសនា ព្រះមហាក្សត្រ</div></div></div><div class="class-title">កាលវិភាគថ្នាក់ទី៖ ${cName}</div><table class="matrix-table"><thead><tr><th style="width:90px;">ម៉ោង</th>`;
+            
+            // 🟢 ដាក់ ${sYear} បន្ថែមលើចំណងជើងកាលវិភាគថ្នាក់ទី
+            let html = `<div class="header-top"><div class="school-side"><div style="font-family:'Khmer OS Muol Light'; font-size:13px; color:var(--main-color)">${schName}</div></div><div class="nation-side"><div class="nation-title">ព្រះរាជាណាចក្រកម្ពុជា</div><div class="nation-motto">ជាតិ សាសនា ព្រះមហាក្សត្រ</div></div></div><div class="class-title">កាលវិភាគថ្នាក់ទី៖ ${cName} ${sYear}</div><table class="matrix-table"><thead><tr><th style="width:90px;">ម៉ោង</th>`;
+            
             daysKh.forEach(d => html += `<th>${d}</th>`);
             html += `</tr></thead><tbody>`;
 
