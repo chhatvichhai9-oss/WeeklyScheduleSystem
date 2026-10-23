@@ -255,12 +255,8 @@
                         <label style="font-size: 10px; color: #0b08c6; font-family: 'Khmer OS Content';">ផ្តើម</label><label style="font-size: 10px; color: #d60b0b; font-family: 'Khmer OS Content';">(ថ្ងៃចន្ទ)</label><label style="font-size: 10px; color: #0b08c6; font-family: 'Khmer OS Content';">បញ្ជីវត្ដមាន៖</label>
                         <input type="date" id="startDate" onchange="renderAttendanceTable()" style="font-size: 10px; color: #e74c3c; border: 1px solid #070ac1; border-radius: 3px; padding: 3px;">
                         <input type="text" id="BookkeeperName" placeholder="ឈ្មោះអ្នកធ្វើបញ្ជី" oninput="saveMetaData()" style="width: 80px; font-size: 10px;border: 1px solid #070ac1;">
-                        <button class="btn-print" style="background-color: #1cae59; font-size: 11px; padding: 3px 6px;" onclick="exportToExcel()">📥 ទាញចេញជា Excel</button>
-                        <button class="btn-print" style="background-color: #811aae; font-size: 11px; padding: 3px 6px;" onclick="document.getElementById('importExcel').click()">📤 បញ្ចូលពី Excel</button>
-                        <input type="file" id="importExcel" style="display:none" accept=".xlsx, .xls" onchange="importFromExcel(event)">
                     </div>
-                <div class="school-input-group"></div>
-                    <button class="btn-clear" style="background-color: #dc0707; font-size: 11px; padding: 3px 6px;" onclick="clearAllData()">🗑️ លុបទាំងអស់</button> 
+                <div class="school-input-group"></div> 
                     <button class="btn-print" style="font-size: 11px; padding: 3px 6px;" onclick="window.print()">🖨️ បោះពុម្ព</button>
                     <button class="btn-print" style="background-color: #870ebb; font-size: 11px; padding: 3px 6px;" onclick="openAdvancedModal()">⚙️កំណត់កម្រិតខ្ពស់/ស្វ័យប្រវត្ដិ</button>
                     <select id="schoolName" onchange="saveMetaData()" style="width: 140px; font-size: 10px; padding: 3px 6px; border: 1px solid #ff1a01;">
@@ -271,16 +267,20 @@
                     <input type="text" id="directorName" placeholder="ឈ្មោះនាយក" oninput="saveMetaData()" style="width: 80px; font-size: 10px;border: 1px solid #e74c3c;">
                     <input type="text" id="chanDate" placeholder="ថ្ងៃចន្ទគតិ..." oninput="saveMetaData()" style="width: 240px; font-size: 10px;border: 1px solid #e74c3c;">
                     <input type="text" id="soriyaDate" placeholder="ថ្ងៃសូរិយគតិ..." oninput="saveMetaData()" style="width: 130px; font-size: 10px;border: 1px solid #e74c3c;">
-                    <!-- 🚪 ប៊ូតុងចាកចេញដាក់នៅខាងក្រៅនេះវិញ -->
-                    <button type="button" class="btn-clear" style="background-color: #d30a0a; font-size: 10px; padding: 3px 6px;" onclick="logoutUser()">🚪ចាកចេញ (Log Out)</button>
-                    <div class="school-input-group"></div>
                     <!-- 🟢 កូដបន្ថែមសម្រាប់ជ្រើសរើស និងបង្ហាញកាលវិភាគគ្រូដាច់ដោយឡែក -->
                     <div style="display: flex; gap: 5px; align-items: center; background: #fdfefe; padding: 4px; border-radius: 4px; border: 1px solid #1a5276; margin: 3px 0;">
                         <span style="font-size: 10.5px; font-weight: bold; color: #1a5276;">👨‍🏫 កាលវិភាគបុគ្គលិក/គ្រូ៖</span>
                         <select id="teacherSelectDropdown" style="font-size: 10.5px; padding: 3px; border: 1px solid #1a5276; border-radius: 3px; min-width: 100px;">
-                            <option value="">--ជ្រើសរើសឈ្មោះគ្រូ--</option>
+                            <option value="">-- ជ្រើសរើសឈ្មោះ ឬលេខរៀងគ្រូ --</option>
                         </select>
                         <button type="button" class="btn-print" style="background-color: #2980b9; font-size: 10.5px; padding: 3px 8px;" onclick="openTeacherScheduleModal()">🔍 មើលកាលវិភាគគ្រូ</button>
+                    <button class="btn-print" style="background-color: #1cae59; font-size: 11px; padding: 3px 6px;" onclick="exportToExcel()">📥 ទាញចេញជា Excel</button>
+                        <button class="btn-print" style="background-color: #811aae; font-size: 11px; padding: 3px 6px;" onclick="document.getElementById('importExcel').click()">📤 បញ្ចូលពី Excel</button>
+                        <input type="file" id="importExcel" style="display:none" accept=".xlsx, .xls" onchange="importFromExcel(event)">
+                    <!-- 🚪 ប៊ូតុងចាកចេញដាក់នៅខាងក្រៅនេះវិញ -->
+                    <button type="button" class="btn-clear" style="background-color: #d30a0a; font-size: 10px; padding: 3px 6px;" onclick="logoutUser()">🚪ចាកចេញ (Log Out)</button>
+                    <div class="school-input-group"></div>
+                    <button class="btn-clear" style="background-color: #dc0707; font-size: 11px; padding: 3px 6px;" onclick="clearAllData()">🗑️ លុបទាំងអស់</button>
                     </div>
                 </select>
             </div>
@@ -292,8 +292,12 @@
                 <input type="text" id="schoolYear" placeholder="ឧ.២០២៥-២០២៦" oninput="saveMetaData()" style="width: 80px; font-size: 11px; border: 1px solid #1a5276; padding: 2px 5px; border-radius: 4px;">
             </div>
             <h2>ប្រព័ន្ធគ្រប់គ្រងកាលវិភាគសិក្សា</h2>
-            <span class="color-label">ពណ៌ប្រធានបទ៖</span>
-            <div class="color-options" id="colorPicker"></div>
+            <div style="display: flex; align-items: center; gap: 5px;">
+            <label style="font-weight: bold; font-size: 11px; color: #1a5276; white-space: nowrap;">🎨 ពណ៌ប្រធានបទ៖</label>
+            <select id="themeColorSelect" onchange="changeThemeColor(this.value)" style="font-size: 10.5px; padding: 2px 5px; border: 1px solid #1a5276; border-radius: 4px; background: #fff;">
+                <!-- បញ្ជីពណ៌នឹងត្រូវទាញមកដាក់ទីនេះស្វ័យប្រវត្តិ ឬដាក់ជម្រើសពណ៌ស្រាប់ -->
+            </select>
+        </div>
             
             
         </div>
@@ -589,7 +593,49 @@
         };
     }
 
-    const colorList = ["#c0392b", "#2980b9", "#27ae60", "#8e44ad", "#f39c12", "#2c3e50", "#16a085", "#d35400", "#1A16CC", "#2ecc71", "#3498db", "#9b59b6", "#e74c3c", "#f1c40f", "#1abc9c"];
+        const colorList = [
+        { name: "ក្រហម", value: "#c0392b" },
+        { name: "ខៀវទឹកសមុទ្រ", value: "#2980b9" },
+        { name: "បៃតង", value: "#27ae60" },
+        { name: "ស្វាយ", value: "#8e44ad" },
+        { name: "ទឹកក្រូច", value: "#f39c12" },
+        { name: "ប្រផេះដិត", value: "#2c3e50" },
+        { name: "បៃតងខ្ចី", value: "#16a085" },
+        { name: "ស្វាយដិត", value: "#1A16CC" },
+        { name: "បៃតងស្រស់", value: "#2ecc71" },
+        { name: "ខៀវភ្លឺ", value: "#3498db" },
+        { name: "ផ្កាឈូក/ស្វាយ", value: "#9b59b6" },
+        { name: "ក្រហមស្រស់", value: "#e74c3c" },
+        { name: "លឿង", value: "#f1c40f" },
+        { name: "បៃតងត្បូងមរកត", value: "#1abc9c" },
+        { name: "ផ្កាឈូកស្រស់", value: "#e84393" },
+        { name: "ត្នោតកាហ្វេ", value: "#6d4c41" },
+        { name: "ខៀវអ៊ិនឌីហ្គោ", value: "#3f51b5" },
+        { name: "បៃតងម៉ុញ", value: "#00b894" },
+        { name: "ក្រហមខូរ៉ាល់", value: "#ff6b6b" },
+        { name: "ប្រផេះទន់", value: "#636e72" }
+    ];
+
+    function initColors() {
+        const selectDropdown = document.getElementById('themeColorSelect');
+        if (!selectDropdown) return;
+
+        const savedColor = localStorage.getItem('themeColor') || "#2980b9";
+        document.documentElement.style.setProperty('--main-color', savedColor);
+
+        let html = "";
+        colorList.forEach(item => {
+            const isSelected = item.value === savedColor ? "selected" : "";
+            html += `<option value="${item.value}" ${isSelected}>${item.name}</option>`;
+        });
+        selectDropdown.innerHTML = html;
+    }
+
+    function changeThemeColor(color) {
+        document.documentElement.style.setProperty('--main-color', color);
+        localStorage.setItem('themeColor', color);
+        renderAll();
+    }
     
     window.onload = function() {
         initColors();
@@ -603,26 +649,6 @@
         renderLists(); 
         renderAll();
     };
-
-    function initColors() {
-        const picker = document.getElementById('colorPicker');
-        const savedColor = localStorage.getItem('themeColor') || "#2980b9";
-        document.documentElement.style.setProperty('--main-color', savedColor);
-        colorList.forEach(color => {
-            const dot = document.createElement('div');
-            dot.className = 'color-dot' + (color === savedColor ? ' active' : '');
-            dot.style.backgroundColor = color;
-            dot.onclick = () => {
-                document.documentElement.style.setProperty('--main-color', color);
-                localStorage.setItem('themeColor', color);
-                document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-                dot.classList.add('active');
-                renderAll();
-            };
-            picker.appendChild(dot);
-        });
-    }
-
     function saveMetaData() {
         const sch = document.getElementById('schoolName').value;
         localStorage.setItem('schoolName', sch);
