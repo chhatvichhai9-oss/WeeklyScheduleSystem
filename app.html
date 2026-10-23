@@ -277,8 +277,8 @@
                     <!-- 🟢 កូដបន្ថែមសម្រាប់ជ្រើសរើស និងបង្ហាញកាលវិភាគគ្រូដាច់ដោយឡែក -->
                     <div style="display: flex; gap: 5px; align-items: center; background: #fdfefe; padding: 4px; border-radius: 4px; border: 1px solid #1a5276; margin: 3px 0;">
                         <span style="font-size: 10.5px; font-weight: bold; color: #1a5276;">👨‍🏫 កាលវិភាគបុគ្គលិក/គ្រូ៖</span>
-                        <select id="teacherSelectDropdown" style="font-size: 10.5px; padding: 3px; border: 1px solid #1a5276; border-radius: 3px; min-width: 140px;">
-                            <option value="">-- ជ្រើសរើសឈ្មោះ ឬលេខរៀងគ្រូ --</option>
+                        <select id="teacherSelectDropdown" style="font-size: 10.5px; padding: 3px; border: 1px solid #1a5276; border-radius: 3px; min-width: 100px;">
+                            <option value="">--ជ្រើសរើសឈ្មោះគ្រូ--</option>
                         </select>
                         <button type="button" class="btn-print" style="background-color: #2980b9; font-size: 10.5px; padding: 3px 8px;" onclick="openTeacherScheduleModal()">🔍 មើលកាលវិភាគគ្រូ</button>
                     </div>
@@ -736,8 +736,9 @@
                 for (let i = 0; i < hours; i++) targetBlocks.push(1);
             }
 
-            let assignedRole = baseRole;
-            if (homeroomClass && homeroomClass.toLowerCase() === cName.toLowerCase()) {
+            // 🟢 កូដកែសម្រួល៖ ឱ្យចេញតួនាទីជាគ្រូបន្ទុកថ្នាក់ เฉพาะថ្នាក់ដែលត្រូវគ្នាពិតប្រាកដប៉ុណ្ណោះ ក្រៅពីហ្នឹងជាគ្រូបង្រៀនធម្មតា
+            let assignedRole = "គ្រូបង្រៀន";
+            if (homeroomClass && cName.toLowerCase().includes(homeroomClass.toLowerCase())) {
                 assignedRole = "គ្រូបន្ទុកថ្នាក់";
             }
 
