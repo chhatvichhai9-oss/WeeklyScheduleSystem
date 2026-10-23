@@ -252,10 +252,12 @@
                         <input type="time" id="globalStartAfternoon" value="13:00" onchange="updateCustomTimeSlots()" style="width: 80px; font-size: 10px;">
                         <label style="font-size: 10px;">ដល់៖</label>
                         <input type="time" id="globalEndAfternoon" value="17:00" onchange="updateCustomTimeSlots()" style="width: 80px; font-size: 10px;">
-                        <label style="font-size: 10px; color: #0b08c6; font-family: 'Khmer OS Content';">ចាប់ផ្តើម</label><label style="font-size: 10px; color: #d60b0b; font-family: 'Khmer OS Content';">(ថ្ងៃចន្ទ)</label><label style="font-size: 10px; color: #0b08c6; font-family: 'Khmer OS Content';">បញ្ជីវត្ដមានតាមថ្ងៃ៖</label>
+                        <label style="font-size: 10px; color: #0b08c6; font-family: 'Khmer OS Content';">ផ្តើម</label><label style="font-size: 10px; color: #d60b0b; font-family: 'Khmer OS Content';">(ថ្ងៃចន្ទ)</label><label style="font-size: 10px; color: #0b08c6; font-family: 'Khmer OS Content';">បញ្ជីវត្ដមាន៖</label>
                         <input type="date" id="startDate" onchange="renderAttendanceTable()" style="font-size: 10px; color: #e74c3c; border: 1px solid #070ac1; border-radius: 3px; padding: 3px;">
                         <input type="text" id="BookkeeperName" placeholder="ឈ្មោះអ្នកធ្វើបញ្ជី" oninput="saveMetaData()" style="width: 80px; font-size: 10px;border: 1px solid #070ac1;">
-                        
+                        <button class="btn-print" style="background-color: #1cae59; font-size: 11px; padding: 3px 6px;" onclick="exportToExcel()">📥 ទាញចេញជា Excel</button>
+                        <button class="btn-print" style="background-color: #811aae; font-size: 11px; padding: 3px 6px;" onclick="document.getElementById('importExcel').click()">📤 បញ្ចូលពី Excel</button>
+                        <input type="file" id="importExcel" style="display:none" accept=".xlsx, .xls" onchange="importFromExcel(event)">
                     </div>
                 <div class="school-input-group"></div>
                     <button class="btn-clear" style="background-color: #dc0707; font-size: 11px; padding: 3px 6px;" onclick="clearAllData()">🗑️ លុបទាំងអស់</button> 
@@ -282,9 +284,6 @@
             <h2>ប្រព័ន្ធគ្រប់គ្រងកាលវិភាគសិក្សា</h2>
             <span class="color-label">ពណ៌ប្រធានបទ៖</span>
             <div class="color-options" id="colorPicker"></div>
-            <button class="btn-print" style="background-color: #1cae59; font-size: 11px; padding: 3px 6px;" onclick="exportToExcel()">📥 ទាញចេញជា Excel</button>
-                        <button class="btn-print" style="background-color: #811aae; font-size: 11px; padding: 3px 6px;" onclick="document.getElementById('importExcel').click()">📤 បញ្ចូលពី Excel</button>
-                        <input type="file" id="importExcel" style="display:none" accept=".xlsx, .xls" onchange="importFromExcel(event)">
             <!-- 🚪 ប៊ូតុងចាកចេញដាក់នៅខាងក្រៅនេះវិញ -->
                     <button type="button" class="btn-clear" style="background-color: #d30a0a; font-size: 10px; padding: 3px 6px;" onclick="logoutUser()">🚪ចាកចេញ (Log Out)</button>
                     <div class="school-input-group"></div>
