@@ -275,9 +275,6 @@
         </div>
         <!-- ✏️ កូដថ្មីដែលត្រូវផ្លាស់ប្តូរជំនួស -->
             <div class="color-picker-section">
-            <button class="btn-print" style="background-color: #1cae59; font-size: 11px; padding: 3px 6px;" onclick="exportToExcel()">📥 ទាញចេញជា Excel</button>
-                        <button class="btn-print" style="background-color: #811aae; font-size: 11px; padding: 3px 6px;" onclick="document.getElementById('importExcel').click()">📤 បញ្ចូលពី Excel</button>
-                        <input type="file" id="importExcel" style="display:none" accept=".xlsx, .xls" onchange="importFromExcel(event)">
             <div style="display: flex; align-items: center; gap: 5px; margin-right: 6px;">
                 <label style="font-weight: bold; font-size: 11px; color: #1a5276; white-space: nowrap;">📅 ឆ្នាំសិក្សា៖</label>
                 <input type="text" id="schoolYear" placeholder="ឧ.២០២៥-២០២៦" oninput="saveMetaData()" style="width: 80px; font-size: 11px; border: 1px solid #1a5276; padding: 2px 5px; border-radius: 4px;">
@@ -285,6 +282,9 @@
             <h2>ប្រព័ន្ធគ្រប់គ្រងកាលវិភាគសិក្សា</h2>
             <span class="color-label">ពណ៌ប្រធានបទ៖</span>
             <div class="color-options" id="colorPicker"></div>
+            <button class="btn-print" style="background-color: #1cae59; font-size: 11px; padding: 3px 6px;" onclick="exportToExcel()">📥 ទាញចេញជា Excel</button>
+                        <button class="btn-print" style="background-color: #811aae; font-size: 11px; padding: 3px 6px;" onclick="document.getElementById('importExcel').click()">📤 បញ្ចូលពី Excel</button>
+                        <input type="file" id="importExcel" style="display:none" accept=".xlsx, .xls" onchange="importFromExcel(event)">
             <!-- 🚪 ប៊ូតុងចាកចេញដាក់នៅខាងក្រៅនេះវិញ -->
                     <button type="button" class="btn-clear" style="background-color: #d30a0a; font-size: 10px; padding: 3px 6px;" onclick="logoutUser()">🚪ចាកចេញ (Log Out)</button>
                     <div class="school-input-group"></div>
