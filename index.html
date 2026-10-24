@@ -196,32 +196,28 @@
         const sessionRef = doc(db, "active_sessions", safeEmailKey);
         const sessionSnap = await getDoc(sessionRef);
 
-        const currentTime = Date.now();
-        const timeoutLimit = 3 * 60 * 1000; // កំណត់ត្រឹម ៣ នាទី (បើគ្មាន Heartbeat ពីម៉ាស៊ីនចាស់ ចាត់ទុកថាឈប់ប្រើ)
-
         if (sessionSnap.exists()) {
           const sessionData = sessionSnap.data();
           
-          // បើជា Device ផ្សេង ហើយម៉ាស៊ីនចាស់នៅមានសកម្មភាព (Active ក្នុងអំឡុងពេលកំណត់) គឺប្លុកចោល
-          if (sessionData.deviceId !== deviceId && (currentTime - sessionData.lastActive < timeoutLimit)) {
+          // បើ Device ID ក្នុង Database ខុសពី Device ID របស់ម៉ាស៊ីនបច្ចុប្បន្ន គឺប្លុកចោលភ្លាមៗ
+          if (sessionData.deviceId !== deviceId) {
             messageDiv.style.color = '#dc2626';
-            messageDiv.innerText = "⚠️ បរាជ័យ៖ គណនីនេះកំពុងត្រូវបានបើកប្រើប្រាស់នៅលើឧបករណ៍ផ្សេងរួចហើយ!";
+            messageDiv.innerText = "⚠️ បរាជ័យ៖ គណនីនេះត្រូវបានចាក់សោរ និងអនុញ្ញាតឱ្យប្រើប្រាស់បានតែនៅលើកុំព្យូទ័រដែលបានកំណត់តែមួយប៉ុណ្ណោះ!";
             await signOut(auth); // បដិសេធមិនឱ្យចូល
             return;
           }
+        } else {
+          // ៣. បើជាការ Login លើកដំបូង (មិនទាន់មានក្នុង Database) ត្រូវកត់ត្រា Device ID នេះទុក
+          await setDoc(sessionRef, {
+            deviceId: deviceId,
+            createdAt: Date.now()
+          });
         }
-
-        // ៣. បើកចូលបាន ធ្វើការកត់ត្រា Device ID នេះចូល Cloud Database
-        await setDoc(sessionRef, {
-          deviceId: deviceId,
-          lastActive: currentTime
-        });
 
         messageDiv.style.color = '#16a34a';
         messageDiv.innerText = "ចូលប្រព័ន្ធជោគជ័យ! កំពុងចូលទៅកាន់ប្រព័ន្ធ...";
         
         sessionStorage.setItem("currentUser", user.email);
-        // ➕ បន្ថែមបន្ទាត់នេះ ដើម្បីកំណត់សិទ្ធិឱ្យទំព័រ app.html ស្គាល់ថាបាន Login រួច
         localStorage.setItem("isLoggedIn", "true");
 
         setTimeout(() => {
