@@ -1721,7 +1721,19 @@ function openTeacherScheduleModal() {
     const teacherEntries = entries.filter(e => e.name === tName);
     const tGender = teacherEntries.length > 0 ? teacherEntries[0].gender : "";
     const tPhone = teacherEntries.length > 0 ? teacherEntries[0].phone : "";
-    const tRole = teacherEntries.length > 0 ? teacherEntries[0].role : "គ្រូបង្រៀន";
+    
+    // 🟢 កូដកែសម្រួល៖ ឆែករកមើលថាតើក្នុងបញ្ជីរបស់គ្រូមានតួនាទីជា "គ្រូបន្ទុកថ្នាក់" ដែរឬទេ
+    let tRole = "គ្រូបង្រៀន";
+    if (teacherEntries.length > 0) {
+        // រកមើលថាតើមានជួរណាដែលមានពាក្យ "បន្ទុក" ដែរឬអត់
+        const homeroomTask = teacherEntries.find(e => e.role && e.role.includes("បន្ទុក"));
+        if (homeroomTask) {
+            tRole = homeroomTask.role; // បើมี គឺយក "គ្រូបន្ទុកថ្នាក់" មកដាក់
+        } else {
+            // បើគ្មានទេ គឺយកតួនាទីធម្មតា (គ្រូបង្រៀន) ពីជួរទីមួយមកប្រើ
+            tRole = teacherEntries[0].role || "គ្រូបង្រៀន";
+        }
+    }
 
     let html = `
         <div class="header-top">
