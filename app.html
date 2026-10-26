@@ -764,44 +764,34 @@
             if (homeroomClass && cName.toLowerCase().includes(homeroomClass.toLowerCase())) {
                 assignedRole = "គ្រូបន្ទុកថ្នាក់";
             }
-
-            let chosenBlocks = [];
             
             // រៀបចំ groups ឱ្យពេលព្រឹកអោយអស់លទ្ធភាពសិន មុនដាក់ពេលល្ងាច (Prioritize Morning first)
-            let sessionGroups = [];
-            if (session === 'morning') {
-                sessionGroups = [customMorning];
-            } else if (session === 'afternoon') {
-                sessionGroups = [customAfternoon];
-            } else {
-                // ដាក់ customMorning មុនដាច់ខាត ដើម្បីឱ្យវាបំពេញម៉ោងព្រឹកសិន
-                sessionGroups = [customMorning, customAfternoon];
-            }
+            let chosenBlocks = [];
 
+            // 🟢 កែសម្រួលថ្មី៖ បែងចែកជា ២ ដំណាក់កាលដាច់ពីគ្នា (បំពេញព្រឹកឱ្យអស់សិន សឹមដាក់ល្ងាច)
             for (let bSize of targetBlocks) {
                 let foundBlock = null;
 
-                // 🔄 រៀបចំថ្ងៃស្វែងរក៖ ព្យាយាមចែកចាយមុខវិជ្ជាដូចគ្នាទៅថ្ងៃផ្សេងគ្នា (ជៀសវាងដាក់ថ្ងៃជាមួយគ្នាពេកបើមានថ្ងៃសល់)
+                // តម្រៀបថ្ងៃ ដើម្បីចែកចាយឱ្យបានស្មើគ្នា
                 let shuffledDays = [...selectedDays];
-                // តម្រៀបថ្ងៃណាដែលទើបតែត្រូវបានជ្រើសរើសតិចជាងគេ ឱ្យទៅមុខគេ
                 shuffledDays.sort((d1, d2) => {
                     let count1 = chosenBlocks.filter(cb => cb.day === d1).length;
                     let count2 = chosenBlocks.filter(cb => cb.day === d2).length;
                     return count1 - count2;
                 });
 
-                for (let day of shuffledDays) {
-                    for (let group of sessionGroups) {
-                        if (group.length === 0) continue;
-                        for (let i = 0; i <= group.length - bSize; i++) {
-                            const block = group.slice(i, i + bSize);
+                // 🌟 ដំណាក់កាលទី ១៖ ព្យាយាមស្វែងរកនិងដាក់បញ្ចូល "ពេលព្រឹក" ឱ្យអស់មុនដាច់ខាត
+                if (session === 'all' || session === 'morning') {
+                    for (let day of shuffledDays) {
+                        if (customMorning.length === 0) break;
+                        for (let i = 0; i <= customMorning.length - bSize; i++) {
+                            const block = customMorning.slice(i, i + bSize);
 
                             const alreadySelectedInDay = chosenBlocks.some(cb => cb.day === day && cb.slots.some(s => block.includes(s)));
-                            
-                            // 🛑 ហាមឃាត់មិនឱ្យមុខវិជ្ជាដូចគ្នាចែកក្នុងថ្ងៃជាមួយគ្នា បើសិនជាអាចរកថ្ងៃផ្សេងបាន
                             const sameSubInSameDay = chosenBlocks.some(cb => cb.day === day);
+                            
                             if (sameSubInSameDay && selectedDays.length > chosenBlocks.length) {
-                                continue; 
+                                continue;
                             }
 
                             const teacherBusy = block.some(slot =>
@@ -818,13 +808,47 @@
                         }
                         if (foundBlock) break;
                     }
-                    if (foundBlock) break;
                 }
 
-                // បើរកមិនបានដោយសារតថ្ងៃ យោងដកបន្ធូរការហាមឃាត់ថ្ងៃដដែល
-                if (!foundBlock) {
+                // 🌟 ដំណាក់កាលទី ២៖ បើពេលព្រឹកអស់ ឬរកមិនបាន (ពេញ) សឹមបន្តមកដាក់ "ពេលល្ងាច"
+                if (!foundBlock && (session === 'all' || session === 'afternoon')) {
                     for (let day of shuffledDays) {
-                        for (let group of sessionGroups) {
+                        if (customAfternoon.length === 0) break;
+                        for (let i = 0; i <= customAfternoon.length - bSize; i++) {
+                            const block = customAfternoon.slice(i, i + bSize);
+
+                            const alreadySelectedInDay = chosenBlocks.some(cb => cb.day === day && cb.slots.some(s => block.includes(s)));
+                            const sameSubInSameDay = chosenBlocks.some(cb => cb.day === day);
+                            
+                            if (sameSubInSameDay && selectedDays.length > chosenBlocks.length) {
+                                continue;
+                            }
+
+                            const teacherBusy = block.some(slot =>
+                                entries.some(e => e.name.toLowerCase() === name.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ")
+                            );
+                            const classBusy = sub === "ការិយាល័យ" ? false : block.some(slot =>
+                                entries.some(e => e.className.toLowerCase() === cName.toLowerCase() && e.day === day && e.time === slot && e.sub !== "ការិយាល័យ")
+                            );
+
+                            if (!alreadySelectedInDay && !teacherBusy && !classBusy) {
+                                foundBlock = { day: day, slots: block };
+                                break;
+                            }
+                        }
+                        if (foundBlock) break;
+                    }
+                }
+
+                // បើរកមិនបានសោះ (ទាំងព្រឹកទាំងល្ងាចដោយជាប់រឿងថ្ងៃដដែល) យោងដកបន្ធូរការហាមឃាត់ថ្ងៃដដែល
+                if (!foundBlock) {
+                    let allGroups = [];
+                    if (session === 'all') allGroups = [customMorning, customAfternoon];
+                    else if (session === 'morning') allGroups = [customMorning];
+                    else allGroups = [customAfternoon];
+
+                    for (let day of shuffledDays) {
+                        for (let group of allGroups) {
                             if (group.length === 0) continue;
                             for (let i = 0; i <= group.length - bSize; i++) {
                                 const block = group.slice(i, i + bSize);
@@ -855,7 +879,6 @@
                     return;
                 }
             }
-
             chosenBlocks.forEach(block => {
                 block.slots.forEach((slot, index) => {
                     entries.push({
