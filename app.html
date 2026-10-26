@@ -767,11 +767,16 @@
 
             let chosenBlocks = [];
             
-            // រៀបចំ groups ឱ្យពេលព្រឹកនៅមុនពេលល្ងាច (Prioritize Morning first)
+            // រៀបចំ groups ឱ្យពេលព្រឹកអោយអស់លទ្ធភាពសិន មុនដាក់ពេលល្ងាច (Prioritize Morning first)
             let sessionGroups = [];
-            if (session === 'morning') sessionGroups = [customMorning];
-            else if (session === 'afternoon') sessionGroups = [customAfternoon];
-            else sessionGroups = [customMorning, customAfternoon]; // ព្រឹកមុន ល្ងាចក្រោយ
+            if (session === 'morning') {
+                sessionGroups = [customMorning];
+            } else if (session === 'afternoon') {
+                sessionGroups = [customAfternoon];
+            } else {
+                // ដាក់ customMorning មុនដាច់ខាត ដើម្បីឱ្យវាបំពេញម៉ោងព្រឹកសិន
+                sessionGroups = [customMorning, customAfternoon];
+            }
 
             for (let bSize of targetBlocks) {
                 let foundBlock = null;
