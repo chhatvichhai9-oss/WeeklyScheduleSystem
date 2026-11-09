@@ -314,7 +314,7 @@
                 <option value="Friday">ថ្ងៃសុក្រ</option><option value="Saturday">ថ្ងៃសៅរ៍</option>
             </select>
             <select id="timeSelect">
-                <option value="0:00 - 0:00">0:00 - 0:00 (ការិយាល័យ/រដ្ឋបាល)</option>
+                <option value="0:00 - 0:00">0:00 - 0:00 (ទីចាត់ការ/រដ្ឋបាល(office))</option>
                 <option value="07:00 - 08:00">07:00 - 08:00</option><option value="08:00 - 09:00">08:00 - 09:00</option>
                 <option value="09:00 - 10:00">09:00 - 10:00</option><option value="10:00 - 11:00">10:00 - 11:00</option>
                 <option value="11:00 - 12:00">11:00 - 12:00</option><option value="12:00 - 13:00">12:00 - 13:00</option>
@@ -337,20 +337,34 @@
                 style="width:70px; border:1px solid #0099ff;"
             >
 
-            <select id="subjectSelect">
-                <option value="ភាសាខ្មែរ(K)">ភាសាខ្មែរ(K)</option><option value="ពលរដ្ឋ(I)">ពលរដ្ឋ(I)</option>
-                <option value="ភូមិវិទ្យា(G)">ភូមិវិទ្យា(G)</option><option value="ប្រវត្តិវិទ្យា(H)">ប្រវត្តិវិទ្យា(H)</option>
-                <option value="គណិតវិទ្យា(M)">គណិតវិទ្យា(M)</option><option value="រូបវិទ្យា(P)">រូបវិទ្យា(P)</option>
-                <option value="គីមីវិទ្យា(C)">គីមីវិទ្យា(C)</option><option value="ជីវវិទ្យា(B)">ជីវវិទ្យា(B)</option>
-                <option value="ផែនដីវិទ្យា(Es)">ផែនដីវិទ្យា(Es)</option><option value="អង់គ្លេស(E)">អង់គ្លេស(E)</option>
-                <option value="បារាំង(FR)">បារាំង(FR)</option><option value="គេហះ(He)">គេហះ(He)</option>
-                <option value="បច្ចេកវិជ្ជា(ICT)">បច្ចេកវិជ្ជា(ICT)</option><option value="អប់រំសិល្បៈ(Art)">អប់រំសិល្បៈ(Art)</option>
-                <option value="កីឡា(Ed)">កីឡា(Ed)</option><option value="អប់រំកាយ(PE)">អប់រំកាយ(PE)</option>
-                <option value="បំណិន(LS)">បំណិន(LS)</option><option value="រោងជាង(WS)">រោងជាង(WS)</option>
-                <option value="កសិកម្ម(Ag)">កសិកម្ម(Ag)</option><option value="សេដ្ឋកិច្ច(ECO)">សេដ្ឋកិច្ច(ECO)</option>
-                <option value="សុខភាព(Hed)">សុខភាព(Hed)</option><option value="ជំនាញវិជ្ជាជីវៈ(VS)">ជំនាញវិជ្ជាជីវៈ(VS)</option>
-                <option value="ICT">ICT</option>
-                <option value="ការិយាល័យ">ការិយាល័យ</option>
+            <input type="text" id="subjectSelect" list="subjectListOptions" placeholder="(ជ្រើស/វាយបញ្ចូល)មុខវិជ្ជា" style="width: 130px; font-weight: bold; font-size: 11px;">
+            <datalist id="subjectListOptions">
+                <option value="ភាសាខ្មែរ(K)">
+                <option value="ពលរដ្ឋ(I)">
+                <option value="ភូមិវិទ្យា(G)">
+                <option value="ប្រវត្តិវិទ្យា(H)">
+                <option value="គណិតវិទ្យា(M)">
+                <option value="រូបវិទ្យា(P)">
+                <option value="គីមីវិទ្យា(C)">
+                <option value="ជីវវិទ្យា(B)">
+                <option value="ផែនដីវិទ្យា(Es)">
+                <option value="អង់គ្លេស(E)">
+                <option value="បារាំង(FR)">
+                <option value="គេហះ(He)">
+                <option value="បច្ចេកវិជ្ជា(ICT)">
+                <option value="អប់រំសិល្បៈ(Art)">
+                <option value="កីឡា(Ed)">
+                <option value="អប់រំកាយ(PE)">
+                <option value="បំណិន(LS)">
+                <option value="រោងជាង(WS)">
+                <option value="កសិកម្ម(Ag)">
+                <option value="សេដ្ឋកិច្ច(ECO)">
+                <option value="សុខភាព(Hed)">
+                <option value="ជំនាញវិជ្ជាជីវៈ(VS)">
+                <option value="ICT">
+                <option value="ទីចាត់ការ/រដ្ឋបាល(Office)">
+                <option value="ការិយាល័យ​"></option>
+            </datalist>
             </select>
             <button 
                 type="button"
@@ -453,21 +467,7 @@
                 <!-- ជួរទី១ (លំនាំដើម) -->
                 <div class="sub-row" style="display: grid; grid-template-columns: 2fr 3fr 1.5fr auto; gap: 6px; align-items: center;">
                     <input type="text" class="row-class" placeholder="ថ្នាក់ (ឧ. ៩ក)" style="font-size: 10.5px; padding: 4px;">
-                    <select class="row-sub" style="font-size: 10.5px; padding: 4px;">
-                        <option value="">-- ជ្រើសរើសមុខវិជ្ជា --</option>
-                        <option value="ភាសាខ្មែរ(K)">ភាសាខ្មែរ(K)</option><option value="ពលរដ្ឋ(I)">ពលរដ្ឋ(I)</option>
-                        <option value="ភូមិវិទ្យា(G)">ភូមិវិទ្យា(G)</option><option value="ប្រវត្តិវិទ្យា(H)">ប្រវត្តិវិទ្យា(H)</option>
-                        <option value="គណិតវិទ្យា(M)">គណិតវិទ្យា(M)</option><option value="រូបវិទ្យា(P)">រូបវិទ្យា(P)</option>
-                        <option value="គីមីវិទ្យា(C)">គីមីវិទ្យា(C)</option><option value="ជីវវិទ្យា(B)">ជីវវិទ្យា(B)</option>
-                        <option value="ផែនដីវិទ្យា(Es)">ផែនដីវិទ្យា(Es)</option><option value="អង់គ្លេស(E)">អង់គ្លេស(E)</option>
-                        <option value="បារាំង(FR)">បារាំង(FR)</option><option value="គេហះ(He)">គេហះ(He)</option>
-                        <option value="បច្ចេកវិជ្ជា(ICT)">បច្ចេកវិជ្ជា(ICT)</option><option value="អប់រំសិល្បៈ(Art)">អប់រំសិល្បៈ(Art)</option>
-                        <option value="កីឡា(Ed)">កីឡា(Ed)</option><option value="អប់រំកាយ(PE)">អប់រំកាយ(PE)</option>
-                        <option value="បំណិន(LS)">បំណិន(LS)</option><option value="រោងជាង(WS)">រោងជាង(WS)</option>
-                        <option value="កសិកម្ម(Ag)">កសិកម្ម(Ag)</option><option value="សេដ្ឋកិច្ច(ECO)">សេដ្ឋកិច្ច(ECO)</option>
-                        <option value="សុខភាព(Hed)">សុខភាព(Hed)</option><option value="ជំនាញវិជ្ជាជីវៈ(VS)">ជំនាញវិជ្ជាជីវៈ(VS)</option>
-                        <option value="ICT">ICT</option><option value="ការិយាល័យ">ការិយាល័យ</option>
-                    </select>
+                    <input type="text" class="row-sub" list="subjectListOptions" placeholder="មុខវិជ្ជា (ជ្រើស/វាយបញ្ចូល)" style="font-size: 10.5px; padding: 4px;">
                     <input type="number" class="row-hours" min="1" placeholder="ចំនួនម៉ោង" style="font-size: 10.5px; padding: 4px;">
                     <button type="button" onclick="removeSubjectRow(this)" style="background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px;">✕</button>
                 </div>
@@ -912,21 +912,7 @@
         newRow.style.cssText = "display: grid; grid-template-columns: 2fr 3fr 1.5fr auto; gap: 6px; align-items: center;";
         newRow.innerHTML = `
             <input type="text" class="row-class" placeholder="ថ្នាក់ (ឧ. ៩ខ)" style="font-size: 10.5px; padding: 4px;">
-            <select class="row-sub" style="font-size: 10.5px; padding: 4px;">
-                <option value="">-- ជ្រើសរើសមុខវិជ្ជា --</option>
-                <option value="ភាសាខ្មែរ(K)">ភាសាខ្មែរ(K)</option><option value="ពលរដ្ឋ(I)">ពលរដ្ឋ(I)</option>
-                <option value="ភូមិវិទ្យា(G)">ភូមិវិទ្យា(G)</option><option value="ប្រវត្តិវិទ្យា(H)">ប្រវត្តិវិទ្យា(H)</option>
-                <option value="គណិតវិទ្យា(M)">គណិតវិទ្យា(M)</option><option value="រូបវិទ្យា(P)">រូបវិទ្យា(P)</option>
-                <option value="គីមីវិទ្យា(C)">គីមីវិទ្យា(C)</option><option value="ជីវវិទ្យា(B)">ជីវវិទ្យា(B)</option>
-                <option value="ផែនដីវិទ្យា(Es)">ផែនដីវិទ្យា(Es)</option><option value="អង់គ្លេស(E)">អង់គ្លេស(E)</option>
-                <option value="បារាំង(FR)">បារាំង(FR)</option><option value="គេហះ(He)">គេហះ(He)</option>
-                <option value="បច្ចេកវិជ្ជា(ICT)">បច្ចេកវិជ្ជា(ICT)</option><option value="អប់រំសិល្បៈ(Art)">អប់រំសិល្បៈ(Art)</option>
-                <option value="កីឡា(Ed)">កីឡា(Ed)</option><option value="អប់រំកាយ(PE)">អប់រំកាយ(PE)</option>
-                <option value="បំណិន(LS)">បំណិន(LS)</option><option value="រោងជាង(WS)">រោងជាង(WS)</option>
-                <option value="កសិកម្ម(Ag)">កសិកម្ម(Ag)</option><option value="សេដ្ឋកិច្ច(ECO)">សេដ្ឋកិច្ច(ECO)</option>
-                <option value="សុខភាព(Hed)">សុខភាព(Hed)</option><option value="ជំនាញវិជ្ជាជីវៈ(VS)">ជំនាញវិជ្ជាជីវៈ(VS)</option>
-                <option value="ICT">ICT</option><option value="ការិយាល័យ">ការិយាល័យ</option>
-            </select>
+            <input type="text" class="row-sub" list="subjectListOptions" placeholder="មុខវិជ្ជា (ជ្រើស/វាយបញ្ចូល)" style="font-size: 10.5px; padding: 4px;">
             <input type="number" class="row-hours" min="1" placeholder="ចំនួនម៉ោង" style="font-size: 10.5px; padding: 4px;">
             <button type="button" onclick="removeSubjectRow(this)" style="background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px;">✕</button>
         `;
@@ -1088,12 +1074,12 @@
 
         if (!name || !cName) return alert("សូមបំពេញឈ្មោះគ្រូ និងថ្នាក់!");
 
-        // បើសិនជាមុខវិជ្ជាមិនមែន "ការិយាល័យ" ទើបពិនិត្យរឿងស្ទួនម៉ោង
-        if (sub !== "ការិយាល័យ") {
-            const teacherConflict = entries.find(e => e.name.toLowerCase() === name.toLowerCase() && e.day === day && e.time === time && e.id != id && e.sub !== "ការិយាល័យ");
+        // បើសិនជាមុខវិជ្ជាមិនមែន "ទីចាត់ការ/រដ្ឋបាល(Office) និង​ ការិយាល័យ​" ទើបពិនិត្យរឿងស្ទួនម៉ោង
+        if (sub !== "ទីចាត់ការ/រដ្ឋបាល(Office)" &&  sub !== "ការិយាល័យ") {
+            const teacherConflict = entries.find(e => e.name.toLowerCase() === name.toLowerCase() && e.day === day && e.time === time && e.id != id && e.sub !== "ទីចាត់ការ/រដ្ឋបាល(Office)" && e.sub !== "ការិយាល័យ" );
             if (teacherConflict) return alert(`⚠️ ស្ទួនម៉ោង៖ លោកគ្រូ/អ្នកគ្រូ ${name} មានម៉ោងបង្រៀននៅថ្នាក់ ${teacherConflict.className} រួចហើយក្នុងម៉ោងនេះ!`);
 
-            const classConflict = entries.find(e => e.className.toLowerCase() === cName.toLowerCase() && e.day === day && e.time === time && e.id != id && e.sub !== "ការិយាល័យ");
+            const classConflict = entries.find(e => e.className.toLowerCase() === cName.toLowerCase() && e.day === day && e.time === time && e.id != id && e.sub !== "ទីចាត់ការ/រដ្ឋបាល(Office)" && e.sub !== "ការិយាល័យ"  && e.name.toLowerCase() !== name.toLowerCase());
             if (classConflict) return alert(`⚠️ ស្ទួនថ្នាក់៖ ថ្នាក់ ${cName} មានគ្រូ ${classConflict.name} កំពុងបង្រៀនរួចហើយក្នុងម៉ោងនេះ!`);
         }
 
@@ -1140,7 +1126,7 @@
     // 🟢 បន្ថែមបន្ទាត់ទាញយកតម្លៃឆ្នាំសិក្សានៅត្រង់នេះ
     const sYear = document.getElementById('schoolYear').value ? ` ឆ្នាំសិក្សា ${document.getElementById('schoolYear').value}` : "";
     
-    const filteredEntries = entries.filter(e => (e.role.includes("គ្រូ") || e.role === "") && e.sub !== "ការិយាល័យ"); 
+    const filteredEntries = entries.filter(e => (e.role.includes("គ្រូ") || e.role === "") && e.sub !== "ទីចាត់ការ/រដ្ឋបាល(Office)" && e.sub !== "ការិយាល័យ"); 
     const uniqueClasses = [...new Set(entries.map(e => e.className))].sort();
     
     const teacherNumberMap = {};
@@ -1420,8 +1406,8 @@
     function renderMatrix() {
         const container = document.getElementById('classes-matrix-container');
         container.innerHTML = "";
-        // ត្រងយកតែគ្រូ និងមិនមែនមុខវិជ្ជា "ការិយាល័យ"
-        const filteredEntries = entries.filter(e => e.role.includes("គ្រូ") && e.sub !== "ការិយាល័យ");
+        // ត្រងយកតែគ្រូ និងមិនមែនមុខវិជ្ជា "ទីចាត់ការ/រដ្ឋបាល(Office)" និង "ការិយាល័យ"
+        const filteredEntries = entries.filter(e => e.role.includes("គ្រូ") && e.sub !== "ទីចាត់ការ/រដ្ឋបាល(Office)" && e.sub !== "ការិយាល័យ");
         const uniqueClasses = [...new Set(filteredEntries.map(e => e.className))].sort();
         const chan = document.getElementById('chanDate').value;
         const soriya = document.getElementById('soriyaDate').value;
@@ -1647,7 +1633,7 @@ function updateTimeSelectDropdowns() {
     const timeSelect = document.getElementById('timeSelect');
     if (timeSelect) {
         // បន្ថែមម៉ោង 0:00 - 0:00 ទុកជាស្រេចដំបូងគេបង្អស់
-        let html = '<option value="0:00 - 0:00">0:00 - 0:00 (ការិយាល័យ/រដ្ឋបាល)</option>';
+        let html = '<option value="0:00 - 0:00">0:00 - 0:00 (ទីចាត់ការ/រដ្ឋបាល(office))</option>';
         
         allSlots.forEach(slot => {
             html += `<option value="${slot}">${slot}</option>`;
